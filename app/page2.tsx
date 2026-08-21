@@ -1,21 +1,15 @@
 "use client";
 
 import Image from "next/image";
-import {
-  useEffect,
-  useRef,
-  useState,
-  type FormEvent,
-  type ReactNode,
-} from "react";
+import { useEffect, useState } from "react";
 
 type Theme = "light" | "dark";
 
 const navLinks = [
-  { label: "Services", href: "#services", id: "services" },
-  { label: "Works", href: "#works", id: "works" },
-  { label: "FAQ", href: "#faq", id: "faq" },
-  { label: "Contact", href: "#contact", id: "contact" },
+  { label: "Services", href: "#services" },
+  { label: "Works", href: "#works" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const services = [
@@ -58,7 +52,7 @@ const bentoSpans = [
 ];
 
 const stats = [
-  { label: "Founded", value: "2026" },
+  { label: "Founded", value: "2023" },
   { label: "Studio Size", value: "1 person" },
   { label: "Disciplines", value: "4" },
   { label: "Based In", value: "Kerala, IN" },
@@ -74,26 +68,6 @@ const faqs = [
     question: "How does a project start?",
     answer:
       "Send a message through the contact form below with a brief description of what you need. We will reply to discuss scope, timeline, and next steps before any work begins.",
-  },
-  {
-    question: "How much does a project cost?",
-    answer:
-      "Pricing depends on scope, features, and timeline. Share the details of your project through the contact form and you'll get a clear, upfront quote before any work starts.",
-  },
-  {
-    question: "How long does a typical project take?",
-    answer:
-      "A simple website usually takes one to two weeks. Web apps, Android apps, and embedded projects vary based on complexity and are scoped individually after the first conversation.",
-  },
-  {
-    question: "What technologies do you work with?",
-    answer:
-      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and standard embedded toolchains for hardware-connected projects.",
-  },
-  {
-    question: "Do you offer support after launch?",
-    answer:
-      "Yes. Every project includes a short post-launch window for fixes, and ongoing maintenance or updates can be arranged separately if you need continued support.",
   },
 ];
 
@@ -177,108 +151,6 @@ function PlusIcon() {
   );
 }
 
-function MenuIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      className="h-5 w-5"
-      aria-hidden
-    >
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
-function CloseIcon() {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.75"
-      className="h-5 w-5"
-      aria-hidden
-    >
-      <path d="M6 6l12 12M18 6L6 18" />
-    </svg>
-  );
-}
-
-function useReveal<T extends HTMLElement>() {
-  const ref = useRef<T | null>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const node = ref.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.15, rootMargin: "0px 0px -40px 0px" }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  return { ref, inView };
-}
-
-function RevealLi({
-  delay = 0,
-  className = "",
-  children,
-}: {
-  delay?: number;
-  className?: string;
-  children: ReactNode;
-}) {
-  const { ref, inView } = useReveal<HTMLLIElement>();
-  return (
-    <li
-      ref={ref}
-      style={{ transitionDelay: inView ? `${delay}ms` : "0ms" }}
-      className={`transition-all duration-700 ease-out ${
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-      } ${className}`}
-    >
-      {children}
-    </li>
-  );
-}
-
-function RevealDiv({
-  delay = 0,
-  className = "",
-  children,
-}: {
-  delay?: number;
-  className?: string;
-  children: ReactNode;
-}) {
-  const { ref, inView } = useReveal<HTMLDivElement>();
-  return (
-    <div
-      ref={ref}
-      style={{ transitionDelay: inView ? `${delay}ms` : "0ms" }}
-      className={`transition-all duration-700 ease-out ${
-        inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
-      } ${className}`}
-    >
-      {children}
-    </div>
-  );
-}
-
 function SectionHeading({
   index,
   eyebrow,
@@ -306,13 +178,6 @@ function SectionHeading({
 export default function Home() {
   const [theme, setTheme] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>("");
-  const [formStatus, setFormStatus] = useState<
-    "idle" | "loading" | "success" | "error"
-  >("idle");
 
   useEffect(() => {
     const initialTheme = getInitialTheme();
@@ -321,46 +186,6 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    function handleScroll() {
-      const doc = document.documentElement;
-      const scrollTop = doc.scrollTop;
-      const scrollHeight = doc.scrollHeight - doc.clientHeight;
-      setScrollProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0);
-      setShowBackToTop(scrollTop > 480);
-    }
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  useEffect(() => {
-    const sections = navLinks
-      .map((link) => document.getElementById(link.id))
-      .filter((node): node is HTMLElement => Boolean(node));
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px", threshold: 0 }
-    );
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [menuOpen]);
-
   function toggleTheme() {
     const nextTheme: Theme = theme === "light" ? "dark" : "light";
     setTheme(nextTheme);
@@ -368,46 +193,8 @@ export default function Home() {
     window.localStorage.setItem("theme", nextTheme);
   }
 
-  async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = event.currentTarget;
-    setFormStatus("loading");
-
-    try {
-      const response = await fetch(form.action, {
-        method: "POST",
-        headers: { Accept: "application/json" },
-        body: new FormData(form),
-      });
-      const result = await response.json();
-
-      if (response.ok && result.success) {
-        setFormStatus("success");
-        form.reset();
-      } else {
-        setFormStatus("error");
-      }
-    } catch {
-      setFormStatus("error");
-    }
-  }
-
   return (
     <div className="min-h-full bg-white text-off-black dark:bg-off-black dark:text-white">
-      <a
-        href="#top"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[var(--on-accent)]"
-      >
-        Skip to content
-      </a>
-
-      <div className="fixed left-0 top-0 z-[60] h-[2px] w-full bg-black/5 dark:bg-white/5">
-        <div
-          className="h-full bg-accent transition-[width] duration-150 ease-out"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
-
       <header className="sticky top-0 z-50 border-b border-black/10 bg-white dark:border-white/10 dark:bg-off-black">
         <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
           <a href="#top" className="shrink-0">
@@ -432,21 +219,10 @@ export default function Home() {
               <a
                 key={link.href}
                 href={link.href}
-                aria-current={activeSection === link.id ? "true" : undefined}
-                className={`group relative text-sm font-medium transition-opacity hover:opacity-100 ${
-                  activeSection === link.id
-                    ? "text-accent opacity-100"
-                    : "opacity-70"
-                }`}
+                className="group relative text-sm font-medium opacity-70 transition-opacity hover:opacity-100"
               >
                 {link.label}
-                <span
-                  className={`absolute -bottom-1 left-0 h-px bg-accent transition-all duration-200 ${
-                    activeSection === link.id
-                      ? "w-full"
-                      : "w-0 group-hover:w-full"
-                  }`}
-                />
+                <span className="absolute -bottom-1 left-0 h-px w-0 bg-accent transition-all duration-200 group-hover:w-full" />
               </a>
             ))}
           </nav>
@@ -460,52 +236,11 @@ export default function Home() {
             >
               {theme === "light" ? <MoonIcon /> : <SunIcon />}
             </button>
-            <a
-              href="#contact"
-              className="btn-primary hidden px-5 py-2.5 text-sm md:inline-flex"
-            >
+            <a href="#contact" className="btn-primary px-5 py-2.5 text-sm">
               Start a Project
             </a>
-            <button
-              type="button"
-              onClick={() => setMenuOpen((open) => !open)}
-              aria-label={menuOpen ? "Close menu" : "Open menu"}
-              aria-expanded={menuOpen}
-              className="btn-icon h-10 w-10 md:hidden"
-            >
-              {menuOpen ? <CloseIcon /> : <MenuIcon />}
-            </button>
           </div>
         </div>
-
-        {menuOpen ? (
-          <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black md:hidden">
-            <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
-              {navLinks.map((link) => (
-                <li key={link.href}>
-                  <a
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`block py-3 text-sm font-medium ${
-                      activeSection === link.id
-                        ? "text-accent"
-                        : "opacity-80"
-                    }`}
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-            <a
-              href="#contact"
-              onClick={() => setMenuOpen(false)}
-              className="btn-primary mt-4 w-full px-5 py-3 text-sm"
-            >
-              Start a Project
-            </a>
-          </nav>
-        ) : null}
       </header>
 
       <main id="top">
@@ -547,19 +282,15 @@ export default function Home() {
             </div>
 
             <dl className="mt-20 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {stats.map((stat, index) => (
-                <RevealDiv
-                  key={stat.label}
-                  delay={index * 80}
-                  className="stat-tile"
-                >
+              {stats.map((stat) => (
+                <div key={stat.label} className="stat-tile">
                   <dt className="font-mono text-xs uppercase tracking-widest opacity-60">
                     {stat.label}
                   </dt>
                   <dd className="mt-2 text-xl font-semibold tracking-tight">
                     {stat.value}
                   </dd>
-                </RevealDiv>
+                </div>
               ))}
             </dl>
           </div>
@@ -573,9 +304,8 @@ export default function Home() {
             <SectionHeading index="01" eyebrow="What I Do" title="Services" />
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:auto-rows-[170px]">
               {services.map((service, index) => (
-                <RevealLi
+                <li
                   key={service.title}
-                  delay={index * 90}
                   className={`${bentoSpans[index]} ${
                     index === 0 ? "bento-feature" : "bento-tile"
                   } flex flex-col justify-between`}
@@ -591,7 +321,7 @@ export default function Home() {
                       {service.description}
                     </p>
                   </div>
-                </RevealLi>
+                </li>
               ))}
             </ul>
           </div>
@@ -609,9 +339,8 @@ export default function Home() {
             />
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:auto-rows-[170px]">
               {works.map((work, index) => (
-                <RevealLi
+                <li
                   key={work.title}
-                  delay={index * 90}
                   className={`${bentoSpans[index]} ${
                     index === 0 ? "bento-feature" : "bento-tile"
                   } flex flex-col justify-between`}
@@ -632,7 +361,7 @@ export default function Home() {
                       </p>
                     ) : null}
                   </div>
-                </RevealLi>
+                </li>
               ))}
             </ul>
           </div>
@@ -645,22 +374,20 @@ export default function Home() {
           <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
             <SectionHeading index="03" eyebrow="Questions" title="FAQ" />
             <div className="mx-auto max-w-3xl divide-y divide-black/10 border-y border-black/10 dark:divide-white/10 dark:border-white/10">
-              {faqs.map((faq, index) => (
-                <RevealDiv key={faq.question} delay={index * 60}>
-                  <details className="faq-item group py-6">
-                    <summary className="flex items-center justify-between gap-4">
-                      <span className="text-lg font-semibold tracking-tight">
-                        {faq.question}
-                      </span>
-                      <span className="text-accent">
-                        <PlusIcon />
-                      </span>
-                    </summary>
-                    <p className="mt-4 max-w-2xl leading-relaxed opacity-70">
-                      {faq.answer}
-                    </p>
-                  </details>
-                </RevealDiv>
+              {faqs.map((faq) => (
+                <details key={faq.question} className="faq-item group py-6">
+                  <summary className="flex items-center justify-between gap-4">
+                    <span className="text-lg font-semibold tracking-tight">
+                      {faq.question}
+                    </span>
+                    <span className="text-accent">
+                      <PlusIcon />
+                    </span>
+                  </summary>
+                  <p className="mt-4 max-w-2xl leading-relaxed opacity-70">
+                    {faq.answer}
+                  </p>
+                </details>
               ))}
             </div>
           </div>
@@ -688,7 +415,7 @@ export default function Home() {
                 </p>
 
                 <div className="mt-8 flex flex-col gap-4 sm:flex-row lg:flex-col">
-                  <RevealDiv className="stat-tile flex-1">
+                  <div className="stat-tile flex-1">
                     <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest opacity-60">
                       <span
                         className="h-1.5 w-1.5 rounded-full bg-accent"
@@ -699,22 +426,21 @@ export default function Home() {
                     <p className="mt-2 font-semibold tracking-tight">
                       Currently accepting new projects
                     </p>
-                  </RevealDiv>
-                  <RevealDiv delay={80} className="stat-tile flex-1">
+                  </div>
+                  <div className="stat-tile flex-1">
                     <p className="font-mono text-xs uppercase tracking-widest opacity-60">
                       Response Time
                     </p>
                     <p className="mt-2 font-semibold tracking-tight">
-                      Within 2 business days
+                      Within 24 hours
                     </p>
-                  </RevealDiv>
+                  </div>
                 </div>
               </div>
 
               <form
                 action="https://api.web3forms.com/submit"
                 method="POST"
-                onSubmit={handleContactSubmit}
                 className="space-y-5 lg:col-span-3"
               >
                 <input
@@ -778,29 +504,12 @@ export default function Home() {
                   />
                 </div>
 
-                <div className="flex flex-wrap items-center gap-4">
-                  <button
-                    type="submit"
-                    disabled={formStatus === "loading"}
-                    className="btn-primary px-7 py-3.5 text-sm disabled:opacity-60"
-                  >
-                    {formStatus === "loading" ? "Sending…" : "Send message"}
-                  </button>
-
-                  <p aria-live="polite" className="text-sm">
-                    {formStatus === "success" ? (
-                      <span className="text-accent">
-                        Thanks — your message is in. I&apos;ll reply within 2
-                        business days.
-                      </span>
-                    ) : null}
-                    {formStatus === "error" ? (
-                      <span className="opacity-70">
-                        Something went wrong. Please try again in a moment.
-                      </span>
-                    ) : null}
-                  </p>
-                </div>
+                <button
+                  type="submit"
+                  className="btn-primary px-7 py-3.5 text-sm"
+                >
+                  Send message
+                </button>
               </form>
             </div>
           </div>
@@ -833,28 +542,6 @@ export default function Home() {
           </div>
         </div>
       </footer>
-
-      <a
-        href="#top"
-        aria-label="Back to top"
-        className={`btn-icon fixed bottom-6 right-6 z-40 h-11 w-11 bg-white transition-opacity duration-200 dark:bg-off-black ${
-          showBackToTop
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0"
-        }`}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.75"
-          className="h-4 w-4"
-          aria-hidden
-        >
-          <path d="M12 19V5M5 12l7-7 7 7" />
-        </svg>
-      </a>
     </div>
   );
 }

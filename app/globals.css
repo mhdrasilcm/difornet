@@ -6,7 +6,7 @@
   --color-white: #ffffff;
   --color-off-black: #111111;
   --color-dark-blue: #1b3a6b;
-  --color-dark-green: #1b4332;
+  --color-mint: #34d399;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -16,13 +16,15 @@
   --background: var(--color-white);
   --foreground: var(--color-off-black);
   --accent: var(--color-dark-blue);
+  --on-accent: var(--color-white);
 }
 
 :root.dark {
   color-scheme: dark;
   --background: var(--color-off-black);
   --foreground: var(--color-white);
-  --accent: var(--color-dark-green);
+  --accent: var(--color-mint);
+  --on-accent: var(--color-off-black);
 }
 
 html {
@@ -43,24 +45,28 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   border-radius: 9999px;
   background-color: var(--accent);
-  color: var(--color-white);
+  color: var(--on-accent);
   font-weight: 600;
+  transition: opacity 0.2s ease;
 }
 
 .btn-primary:hover {
-  opacity: 0.92;
+  opacity: 0.88;
 }
 
 .btn-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
   color: var(--foreground);
   font-weight: 600;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-secondary:hover {
@@ -75,6 +81,7 @@ body {
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
   color: var(--foreground);
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-icon:hover {
@@ -89,11 +96,103 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   padding: 0.75rem 1rem;
+  transition: border-color 0.2s ease;
+}
+
+.input-field:hover {
+  border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
 }
 
 .input-field:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+.bento-tile {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  background-color: color-mix(in srgb, var(--foreground) 3%, transparent);
+  padding: 1.75rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.bento-tile:hover {
+  border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  background-color: color-mix(in srgb, var(--foreground) 5%, transparent);
+}
+
+.bento-feature {
+  position: relative;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  background-color: color-mix(in srgb, var(--accent) 8%, transparent);
+  padding: 1.75rem;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.bento-feature:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
+  background-color: color-mix(in srgb, var(--accent) 12%, transparent);
+}
+
+.bento-index {
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.stat-tile {
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+  padding: 1.25rem 1.5rem;
+}
+
+.section-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono), monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.section-rule {
+  height: 1px;
+  flex: 1;
+  background-color: color-mix(in srgb, var(--foreground) 12%, transparent);
+}
+
+.grid-backdrop {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+  mask-image: linear-gradient(to bottom, black, transparent);
+  pointer-events: none;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-icon {
+  transition: transform 0.2s ease;
+}
+
+.faq-item[open] .faq-icon {
+  transform: rotate(45deg);
 }
 
 a:focus-visible,
