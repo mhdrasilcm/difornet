@@ -50,18 +50,11 @@ const works = [
   { title: "DiforNet", subtitle: "This Site" },
 ];
 
-const serviceSpans = [
+const bentoSpans = [
   "sm:col-span-2 sm:row-span-2",
   "sm:col-span-2 sm:row-span-1",
   "sm:col-span-1 sm:row-span-1",
   "sm:col-span-1 sm:row-span-1",
-];
-
-const workSpans = [
-  "sm:col-span-2 sm:row-span-2",
-  "sm:col-span-1 sm:row-span-1",
-  "sm:col-span-1 sm:row-span-1",
-  "sm:col-span-2 sm:row-span-1",
 ];
 
 const stats = [
@@ -212,42 +205,6 @@ function CloseIcon() {
       aria-hidden
     >
       <path d="M6 6l12 12M18 6L6 18" />
-    </svg>
-  );
-}
-
-function ServiceGlyph({ index }: { index: number }) {
-  const paths = [
-    <g key="web">
-      <rect x="3" y="4" width="18" height="14" rx="2" />
-      <path d="M3 8h18M6 6h.01M8 6h.01" />
-    </g>,
-    <g key="app">
-      <rect x="5" y="3" width="14" height="18" rx="2" />
-      <path d="M11 18h2" />
-    </g>,
-    <g key="android">
-      <rect x="6" y="8" width="12" height="10" rx="2" />
-      <path d="M9 8V6M15 8V6M7 13H5M19 13h-2M10 12h.01M14 12h.01" />
-    </g>,
-    <g key="iot">
-      <circle cx="12" cy="12" r="3" />
-      <path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1" />
-    </g>,
-  ];
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className="h-6 w-6"
-      aria-hidden
-    >
-      {paths[index] ?? paths[0]}
     </svg>
   );
 }
@@ -470,7 +427,7 @@ export default function Home() {
             )}
           </a>
 
-          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -505,7 +462,7 @@ export default function Home() {
             </button>
             <a
               href="#contact"
-              className="btn-primary hidden px-5 py-2.5 text-sm md:inline-flex"
+              className="btn-primary hidden px-5 py-2.5 text-sm lg:inline-flex"
             >
               Start a Project
             </a>
@@ -514,7 +471,7 @@ export default function Home() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
-              className="btn-icon h-10 w-10 md:hidden"
+              className="btn-icon h-10 w-10 lg:hidden"
             >
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
@@ -522,7 +479,7 @@ export default function Home() {
         </div>
 
         {menuOpen ? (
-          <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black md:hidden">
+          <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black lg:hidden">
             <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
               {navLinks.map((link) => (
                 <li key={link.href}>
@@ -554,11 +511,8 @@ export default function Home() {
       <main id="top">
         <section className="relative overflow-hidden px-6 py-24 lg:px-8 lg:py-32">
           <div className="grid-backdrop" aria-hidden />
-          <div className="spatial-orb -right-20 -top-24 h-80 w-80" aria-hidden />
-          <div className="spatial-orb left-1/2 top-40 h-64 w-64 opacity-10" aria-hidden />
-
-          <div className="spatial-layer relative mx-auto max-w-6xl">
-            <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-black/5 px-3 py-1 font-mono text-xs uppercase tracking-widest text-accent neumo-raised-sm dark:border-white/10 dark:bg-white/5">
+          <div className="relative mx-auto max-w-6xl">
+            <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-black/5 px-3 py-1 font-mono text-xs uppercase tracking-widest text-accent dark:border-white/10 dark:bg-white/5">
               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
               Based in Palakkad, Kerala
             </p>
@@ -613,7 +567,7 @@ export default function Home() {
 
         <section
           id="services"
-          className="relative border-t border-black/10 dark:border-white/10"
+          className="border-t border-black/10 dark:border-white/10"
         >
           <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
             <SectionHeading index="01" eyebrow="What I Do" title="Services" />
@@ -622,18 +576,13 @@ export default function Home() {
                 <RevealLi
                   key={service.title}
                   delay={index * 90}
-                  className={`${serviceSpans[index]} ${
-                    index === 0 ? "bento-feature bento-feature-glow" : "bento-tile"
+                  className={`${bentoSpans[index]} ${
+                    index === 0 ? "bento-feature" : "bento-tile"
                   } flex flex-col justify-between`}
                 >
-                  <div className="flex items-start justify-between">
-                    <span className="icon-chip">
-                      <ServiceGlyph index={index} />
-                    </span>
-                    <span className="bento-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
+                  <span className="bento-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                   <div>
                     <p className="text-lg font-semibold tracking-tight lg:text-xl">
                       {service.title}
@@ -650,40 +599,35 @@ export default function Home() {
 
         <section
           id="works"
-          className="relative border-t border-black/10 dark:border-white/10"
+          className="border-t border-black/10 dark:border-white/10"
         >
-          <div className="spatial-orb -right-10 top-1/3 h-72 w-72 opacity-10" aria-hidden />
           <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
             <SectionHeading
               index="02"
               eyebrow="Portfolio"
               title="Selected Works"
             />
-            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:auto-rows-[170px]">
+            <ul className="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:auto-rows-[170px]">
               {works.map((work, index) => (
                 <RevealLi
                   key={work.title}
                   delay={index * 90}
-                  className={`${workSpans[index]} ${
+                  className={`${bentoSpans[index]} ${
                     index === 0 ? "bento-feature" : "bento-tile"
-                  } group relative flex flex-col justify-between overflow-hidden`}
+                  } flex flex-col justify-between`}
                 >
-                  {index === 0 ? <span className="work-visual" aria-hidden /> : null}
-                  <div className="relative z-10 flex items-start justify-between">
-                    <span className="work-badge">
-                      <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-                      {work.subtitle}
-                    </span>
-                    <span className="bento-index">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                  </div>
-                  <div className="relative z-10">
+                  <span className="bento-index">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <div>
                     <p className="text-xl font-semibold tracking-tight">
                       {work.title}
                     </p>
+                    <p className="mt-2 text-sm font-medium text-accent">
+                      {work.subtitle}
+                    </p>
                     {work.description ? (
-                      <p className="mt-3 max-w-md text-sm leading-relaxed opacity-70">
+                      <p className="mt-3 text-sm leading-relaxed opacity-70">
                         {work.description}
                       </p>
                     ) : null}
@@ -696,14 +640,14 @@ export default function Home() {
 
         <section
           id="faq"
-          className="relative border-t border-black/10 dark:border-white/10"
+          className="border-t border-black/10 dark:border-white/10"
         >
           <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
             <SectionHeading index="03" eyebrow="Questions" title="FAQ" />
-            <div className="grid gap-4 md:grid-cols-2">
+            <div className="mx-auto max-w-3xl divide-y divide-black/10 border-y border-black/10 dark:divide-white/10 dark:border-white/10">
               {faqs.map((faq, index) => (
                 <RevealDiv key={faq.question} delay={index * 60}>
-                  <details className="faq-card faq-item">
+                  <details className="faq-item group py-6">
                     <summary className="flex items-center justify-between gap-4">
                       <span className="text-lg font-semibold tracking-tight">
                         {faq.question}
@@ -724,49 +668,46 @@ export default function Home() {
 
         <section
           id="contact"
-          className="relative border-t border-black/10 dark:border-white/10"
+          className="border-t border-black/10 dark:border-white/10"
         >
-          <div className="spatial-orb -left-16 bottom-0 h-72 w-72 opacity-10" aria-hidden />
           <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
             <SectionHeading
               index="04"
               eyebrow="Get In Touch"
               title="Let's Talk"
             />
-            <div className="grid gap-8 lg:grid-cols-5 lg:items-start">
+            <div className="grid gap-16 lg:grid-cols-5 lg:items-start">
               <div className="lg:col-span-2">
-                <div className="bento-tile bento-feature-glow p-8">
-                  <h3 className="text-3xl font-bold tracking-tight lg:text-4xl">
-                    Let&apos;s build{" "}
-                    <span className="text-accent">your next project.</span>
-                  </h3>
-                  <p className="mt-4 text-lg leading-relaxed opacity-70">
-                    Tell me about your project or book a conversation. This is
-                    the only form on the site.
-                  </p>
+                <h3 className="text-3xl font-bold tracking-tight lg:text-4xl">
+                  Let&apos;s build{" "}
+                  <span className="text-accent">your next project.</span>
+                </h3>
+                <p className="mt-4 text-lg leading-relaxed opacity-70">
+                  Tell me about your project or book a conversation. This is
+                  the only form on the site.
+                </p>
 
-                  <div className="mt-8 flex flex-col gap-4">
-                    <div className="stat-tile flex-1">
-                      <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest opacity-60">
-                        <span
-                          className="h-1.5 w-1.5 rounded-full bg-accent"
-                          aria-hidden
-                        />
-                        Status
-                      </p>
-                      <p className="mt-2 font-semibold tracking-tight">
-                        Currently accepting new projects
-                      </p>
-                    </div>
-                    <div className="stat-tile flex-1">
-                      <p className="font-mono text-xs uppercase tracking-widest opacity-60">
-                        Response Time
-                      </p>
-                      <p className="mt-2 font-semibold tracking-tight">
-                        Within 2 business days
-                      </p>
-                    </div>
-                  </div>
+                <div className="mt-8 flex flex-col gap-4 sm:flex-row lg:flex-col">
+                  <RevealDiv className="stat-tile flex-1">
+                    <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest opacity-60">
+                      <span
+                        className="h-1.5 w-1.5 rounded-full bg-accent"
+                        aria-hidden
+                      />
+                      Status
+                    </p>
+                    <p className="mt-2 font-semibold tracking-tight">
+                      Currently accepting new projects
+                    </p>
+                  </RevealDiv>
+                  <RevealDiv delay={80} className="stat-tile flex-1">
+                    <p className="font-mono text-xs uppercase tracking-widest opacity-60">
+                      Response Time
+                    </p>
+                    <p className="mt-2 font-semibold tracking-tight">
+                      Within 2 business days
+                    </p>
+                  </RevealDiv>
                 </div>
               </div>
 
@@ -774,7 +715,7 @@ export default function Home() {
                 action="https://api.web3forms.com/submit"
                 method="POST"
                 onSubmit={handleContactSubmit}
-                className="bento-tile space-y-5 p-8 lg:col-span-3"
+                className="space-y-5 lg:col-span-3"
               >
                 <input
                   type="hidden"
