@@ -50,18 +50,11 @@ body {
   background-color: var(--accent);
   color: var(--on-accent);
   font-weight: 600;
-  box-shadow: 5px 5px 10px color-mix(in srgb, var(--foreground) 12%, transparent), -5px -5px 10px color-mix(in srgb, var(--background) 90%, transparent);
-  transition: opacity 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 .btn-primary:hover {
   opacity: 0.88;
-  transform: translateY(-1px);
-}
-
-.btn-primary:active {
-  box-shadow: inset 3px 3px 6px color-mix(in srgb, var(--foreground) 12%, transparent), inset -3px -3px 6px color-mix(in srgb, var(--background) 90%, transparent);
-  transform: translateY(0);
 }
 
 .btn-secondary {
@@ -73,8 +66,7 @@ body {
   border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
   color: var(--foreground);
   font-weight: 600;
-  box-shadow: 4px 4px 8px color-mix(in srgb, var(--foreground) 8%, transparent), -4px -4px 8px color-mix(in srgb, var(--background) 90%, transparent);
-  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-secondary:hover {
@@ -89,8 +81,7 @@ body {
   border-radius: 9999px;
   border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
   color: var(--foreground);
-  box-shadow: 3px 3px 6px color-mix(in srgb, var(--foreground) 8%, transparent), -3px -3px 6px color-mix(in srgb, var(--background) 90%, transparent);
-  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-icon:hover {
@@ -105,8 +96,7 @@ body {
   background-color: var(--background);
   color: var(--foreground);
   padding: 0.75rem 1rem;
-  box-shadow: inset 3px 3px 7px color-mix(in srgb, var(--foreground) 7%, transparent), inset -3px -3px 7px color-mix(in srgb, var(--background) 90%, transparent);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease;
 }
 
 .input-field:hover {
@@ -157,12 +147,6 @@ body {
   border-radius: 1rem;
   border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
   padding: 1.25rem 1.5rem;
-}
-
-.bento-tile,
-.bento-feature,
-.stat-tile {
-  box-shadow: 6px 6px 12px color-mix(in srgb, var(--foreground) 7%, transparent), -6px -6px 12px color-mix(in srgb, var(--background) 90%, transparent);
 }
 
 .section-eyebrow {

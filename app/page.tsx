@@ -427,7 +427,7 @@ export default function Home() {
             )}
           </a>
 
-          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+          <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 lg:flex">
             {navLinks.map((link) => (
               <a
                 key={link.href}
@@ -462,7 +462,7 @@ export default function Home() {
             </button>
             <a
               href="#contact"
-              className="btn-primary hidden px-5 py-2.5 text-sm md:inline-flex"
+              className="btn-primary hidden px-5 py-2.5 text-sm lg:inline-flex"
             >
               Start a Project
             </a>
@@ -471,7 +471,7 @@ export default function Home() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
-              className="btn-icon h-10 w-10 md:hidden"
+              className="btn-icon h-10 w-10 lg:hidden"
             >
               {menuOpen ? <CloseIcon /> : <MenuIcon />}
             </button>
@@ -479,7 +479,7 @@ export default function Home() {
         </div>
 
         {menuOpen ? (
-          <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black md:hidden">
+          <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black lg:hidden">
             <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
               {navLinks.map((link) => (
                 <li key={link.href}>
