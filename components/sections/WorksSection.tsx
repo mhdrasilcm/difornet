@@ -19,7 +19,7 @@ export function WorksSection({ works }: WorksSectionProps) {
   return (
     <section
       id="works"
-      className="relative border-t border-black/10 dark:border-white/10"
+      className="relative border-t border-black/10 dark:border-white/10 gradient-bg"
     >
       <div className="spatial-orb -right-10 top-1/3 h-72 w-72 opacity-10" aria-hidden />
       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
@@ -37,10 +37,10 @@ export function WorksSection({ works }: WorksSectionProps) {
                 index === 0 ? "bento-feature" : "bento-tile"
               } group relative flex flex-col justify-between overflow-hidden`}
             >
-              {index === 0 ? <span className="work-visual" aria-hidden /> : null}
+              {index === 0 ? <span className="work-visual animate-pulse" aria-hidden /> : null}
               <div className="relative z-10 flex items-start justify-between">
-                <span className="work-badge">
-                  <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+                <span className="work-badge group-hover:scale-105 transition-transform duration-300 ease-out">
+                  <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
                   {work.subtitle}
                 </span>
                 <span className="bento-index">
@@ -48,7 +48,7 @@ export function WorksSection({ works }: WorksSectionProps) {
                 </span>
               </div>
               <div className="relative z-10">
-                <p className="text-xl font-semibold tracking-tight">
+                <p className="text-xl font-semibold tracking-tight gradient-text">
                   {work.title}
                 </p>
                 {work.description ? (

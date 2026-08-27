@@ -67,7 +67,7 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
   return (
     <section
       id="contact"
-      className="relative border-t border-black/10 dark:border-white/10"
+      className="relative border-t border-black/10 dark:border-white/10 gradient-bg"
     >
       <div className="spatial-orb -left-16 bottom-0 h-72 w-72 opacity-10" aria-hidden />
       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
@@ -78,10 +78,10 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
         />
         <div className="grid gap-8 lg:grid-cols-5 lg:items-start">
           <div className="lg:col-span-2">
-            <div className="bento-tile bento-feature-glow p-8">
+            <div className="bento-tile bento-feature-glow p-8 group">
               <h3 className="text-3xl font-bold tracking-tight lg:text-4xl">
                 Let&apos;s build{" "}
-                <span className="text-accent">your next project.</span>
+                <span className="gradient-text">your next project.</span>
               </h3>
               <p className="mt-4 text-lg leading-relaxed opacity-70">
                 Tell me about your project or book a conversation. This is
@@ -89,23 +89,23 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
               </p>
 
               <div className="mt-8 flex flex-col gap-4">
-                <div className="stat-tile flex-1">
+                <div className="stat-tile flex-1 hover:scale-[1.02] transition-transform duration-300 ease-out">
                   <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest opacity-60">
                     <span
-                      className="h-1.5 w-1.5 rounded-full bg-accent"
+                      className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"
                       aria-hidden
                     />
                     Status
                   </p>
-                  <p className="mt-2 font-semibold tracking-tight">
+                  <p className="mt-2 font-semibold tracking-tight gradient-text">
                     Currently accepting new projects
                   </p>
                 </div>
-                <div className="stat-tile flex-1">
+                <div className="stat-tile flex-1 hover:scale-[1.02] transition-transform duration-300 ease-out">
                   <p className="font-mono text-xs uppercase tracking-widest opacity-60">
                     Response Time
                   </p>
-                  <p className="mt-2 font-semibold tracking-tight">
+                  <p className="mt-2 font-semibold tracking-tight gradient-text">
                     Within 2 business days
                   </p>
                 </div>
@@ -117,7 +117,7 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
             action="https://api.web3forms.com/submit"
             method="POST"
             onSubmit={handleContactSubmit}
-            className="bento-tile space-y-5 p-8 lg:col-span-3"
+            className="bento-tile space-y-5 p-8 lg:col-span-3 group"
           >
             <input
               type="hidden"

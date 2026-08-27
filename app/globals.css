@@ -7,6 +7,7 @@
   --color-off-black: #111111;
   --color-dark-blue: #1b3a6b;
   --color-mint: #34d399;
+  --color-accent-glow: rgba(52, 211, 153, 0.5);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -40,6 +41,31 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---------- Gradient backgrounds ---------- */
+
+.gradient-bg {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+    transparent 50%,
+    color-mix(in srgb, var(--accent) 5%, transparent) 100%
+  );
+}
+
+.gradient-text {
+  background: linear-gradient(
+    135deg,
+    var(--accent) 0%,
+    color-mix(in srgb, var(--accent) 70%, var(--foreground)) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* ---------- Spatial depth system ---------- */
@@ -48,12 +74,14 @@ body {
   box-shadow:
     6px 6px 14px var(--shadow-dark),
     -6px -6px 14px var(--shadow-light);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .neumo-raised-sm {
   box-shadow:
     4px 4px 9px var(--shadow-dark),
     -4px -4px 9px var(--shadow-light);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .neumo-inset {
@@ -66,6 +94,7 @@ body {
   box-shadow:
     10px 10px 22px var(--shadow-dark),
     -10px -10px 22px var(--shadow-light);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .spatial-orb {
@@ -76,6 +105,18 @@ body {
   background: var(--accent);
   pointer-events: none;
   z-index: 0;
+  animation: orb-pulse 8s ease-in-out infinite;
+}
+
+@keyframes orb-pulse {
+  0%, 100% {
+    opacity: 0.22;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.05);
+  }
 }
 
 .spatial-layer {
@@ -107,12 +148,37 @@ body {
   box-shadow:
     5px 5px 10px var(--shadow-dark),
     -5px -5px 10px var(--shadow-light);
-  transition: opacity 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: opacity 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 .btn-primary:hover {
   opacity: 0.9;
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow:
+    7px 7px 14px var(--shadow-dark),
+    -7px -7px 14px var(--shadow-light);
 }
 
 .btn-primary:active {
@@ -134,13 +200,34 @@ body {
   box-shadow:
     4px 4px 8px var(--shadow-dark),
     -4px -4px 8px var(--shadow-light);
-  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-secondary::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  transition: width 0.3s ease;
+  z-index: -1;
+}
+
+.btn-secondary:hover::before {
+  width: 100%;
 }
 
 .btn-secondary:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow:
+    6px 6px 12px var(--shadow-dark),
+    -6px -6px 12px var(--shadow-light);
 }
 
 .btn-icon {
@@ -153,13 +240,16 @@ body {
   box-shadow:
     3px 3px 6px var(--shadow-dark),
     -3px -3px 6px var(--shadow-light);
-  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .btn-icon:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow:
+    5px 5px 10px var(--shadow-dark),
+    -5px -5px 10px var(--shadow-light);
 }
 
 /* ---------- Menu toggle — desktop-safe hide ---------- */
@@ -188,16 +278,21 @@ body {
   box-shadow:
     inset 3px 3px 7px var(--shadow-dark),
     inset -3px -3px 7px var(--shadow-light);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .input-field:hover {
   border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+  transform: translateY(-1px);
 }
 
 .input-field:focus {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+  transform: translateY(0);
+  box-shadow:
+    inset 2px 2px 5px var(--shadow-dark),
+    inset -2px -2px 5px var(--shadow-light);
 }
 
 .input-field[aria-invalid="true"] {
@@ -224,15 +319,37 @@ body {
   box-shadow:
     6px 6px 14px var(--shadow-dark),
     -6px -6px 14px var(--shadow-light);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+  overflow: hidden;
+}
+
+.bento-tile::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 5%, transparent) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.bento-tile:hover::before {
+  opacity: 1;
 }
 
 .bento-tile:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px) scale(1.01);
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow:
-    10px 10px 22px var(--shadow-dark),
-    -10px -10px 22px var(--shadow-light);
+    12px 12px 28px var(--shadow-dark),
+    -12px -12px 28px var(--shadow-light);
 }
 
 .bento-feature {
@@ -246,15 +363,43 @@ body {
   box-shadow:
     8px 8px 18px var(--shadow-dark),
     -8px -8px 18px var(--shadow-light);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  overflow: hidden;
+}
+
+.bento-feature::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+    transparent 70%
+  );
+  animation: feature-glow-pulse 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes feature-glow-pulse {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1) rotate(5deg);
+  }
 }
 
 .bento-feature:hover {
-  transform: translateY(-3px);
+  transform: translateY(-5px) scale(1.02);
   border-color: color-mix(in srgb, var(--accent) 60%, transparent);
   box-shadow:
-    12px 12px 26px var(--shadow-dark),
-    -12px -12px 26px var(--shadow-light);
+    14px 14px 32px var(--shadow-dark),
+    -14px -14px 32px var(--shadow-light);
 }
 
 .bento-feature-glow::before {
@@ -305,11 +450,15 @@ body {
   box-shadow:
     5px 5px 12px var(--shadow-dark),
     -5px -5px 12px var(--shadow-light);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .stat-tile:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+  box-shadow:
+    8px 8px 18px var(--shadow-dark),
+    -8px -8px 18px var(--shadow-light);
 }
 
 /* ---------- Work visual panel ---------- */
@@ -360,18 +509,23 @@ body {
   box-shadow:
     5px 5px 12px var(--shadow-dark),
     -5px -5px 12px var(--shadow-light);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .faq-card:hover {
   border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+  transform: translateY(-2px);
+  box-shadow:
+    7px 7px 16px var(--shadow-dark),
+    -7px -7px 16px var(--shadow-light);
 }
 
 .faq-card[open] {
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow:
-    7px 7px 16px var(--shadow-dark),
-    -7px -7px 16px var(--shadow-light);
+    9px 9px 20px var(--shadow-dark),
+    -9px -9px 20px var(--shadow-light);
+  transform: translateY(-1px);
 }
 
 .faq-item summary {
@@ -384,7 +538,7 @@ body {
 }
 
 .faq-icon {
-  transition: transform 0.2s ease;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .faq-item[open] .faq-icon {

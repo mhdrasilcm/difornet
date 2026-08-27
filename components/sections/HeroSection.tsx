@@ -12,20 +12,20 @@ interface HeroSectionProps {
 
 export function HeroSection({ stats }: HeroSectionProps) {
   return (
-    <section className="relative overflow-hidden px-6 py-24 lg:px-8 lg:py-32">
+    <section className="relative overflow-hidden px-6 py-24 lg:px-8 lg:py-32 gradient-bg">
       <div className="grid-backdrop" aria-hidden />
       <div className="spatial-orb -right-20 -top-24 h-80 w-80" aria-hidden />
       <div className="spatial-orb left-1/2 top-40 h-64 w-64 opacity-10" aria-hidden />
 
       <div className="spatial-layer relative mx-auto max-w-6xl">
         <p className="mb-6 inline-flex items-center gap-2.5 rounded-full border border-black/10 bg-black/5 px-3 py-1 font-mono text-xs uppercase tracking-widest text-accent neumo-raised-sm dark:border-white/10 dark:bg-white/5">
-          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+          <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
           Based in Palakkad, Kerala
         </p>
 
         <h1 className="max-w-5xl text-5xl font-bold leading-[1.05] tracking-tight lg:text-7xl">
           A one-person studio building{" "}
-          <span className="text-accent">
+          <span className="gradient-text">
             web, mobile, and embedded software.
           </span>
         </h1>
@@ -62,7 +62,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
               <dt className="font-mono text-xs uppercase tracking-widest opacity-60">
                 {stat.label}
               </dt>
-              <dd className="mt-2 text-xl font-semibold tracking-tight">
+              <dd className="mt-2 text-xl font-semibold tracking-tight gradient-text">
                 {stat.value}
               </dd>
             </RevealDiv>
