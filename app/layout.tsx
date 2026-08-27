@@ -15,7 +15,10 @@ const geistMono = Geist_Mono({
 
 // Set NEXT_PUBLIC_SITE_URL in your environment once the domain is live —
 // used for canonical/OG URLs, robots.txt, and the sitemap.
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev";
+const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev";
+// Strip any markdown link artifacts if present
+const cleanUrl = rawUrl.replace(/\[|\]|\(.*\)/g, "").trim() || "https://difornet.pages.dev";
+const siteUrl = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
