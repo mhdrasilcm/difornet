@@ -356,6 +356,11 @@ export default function Home() {
   const [formStatus, setFormStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
+  const [fieldErrors, setFieldErrors] = useState<{
+    name?: string;
+    email?: string;
+    message?: string;
+  }>({});
 
   useEffect(() => {
     const initialTheme = getInitialTheme();
@@ -411,9 +416,35 @@ export default function Home() {
     window.localStorage.setItem("theme", nextTheme);
   }
 
+  function validateContactForm(form: HTMLFormElement) {
+    const data = new FormData(form);
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim();
+    const message = String(data.get("message") ?? "").trim();
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const errors: typeof fieldErrors = {};
+    if (!name) errors.name = "Please enter your name.";
+    if (!email) {
+      errors.email = "Please enter your email.";
+    } else if (!emailPattern.test(email)) {
+      errors.email = "Please enter a valid email address.";
+    }
+    if (!message) errors.message = "Please add a short message.";
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  }
+
   async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
+
+    if (!validateContactForm(form)) {
+      setFormStatus("error");
+      return;
+    }
+
     setFormStatus("loading");
 
     try {
@@ -426,7 +457,9 @@ export default function Home() {
 
       if (response.ok && result.success) {
         setFormStatus("success");
+        setFieldErrors({});
         form.reset();
+        window.location.href = "/thank-you";
       } else {
         setFormStatus("error");
       }
@@ -786,6 +819,13 @@ export default function Home() {
                   name="subject"
                   value="DiforNet — New contact / booking"
                 />
+                <input
+                  type="hidden"
+                  name="redirect"
+                  value={`${
+                    process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev"
+                  }/thank-you`}
+                />
 
                 <div>
                   <label
@@ -800,8 +840,17 @@ export default function Home() {
                     type="text"
                     required
                     autoComplete="name"
+                    aria-invalid={fieldErrors.name ? "true" : undefined}
+                    aria-describedby={
+                      fieldErrors.name ? "name-error" : undefined
+                    }
                     className="input-field"
                   />
+                  {fieldErrors.name ? (
+                    <p id="name-error" className="field-error">
+                      {fieldErrors.name}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -817,8 +866,17 @@ export default function Home() {
                     type="email"
                     required
                     autoComplete="email"
+                    aria-invalid={fieldErrors.email ? "true" : undefined}
+                    aria-describedby={
+                      fieldErrors.email ? "email-error" : undefined
+                    }
                     className="input-field"
                   />
+                  {fieldErrors.email ? (
+                    <p id="email-error" className="field-error">
+                      {fieldErrors.email}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div>
@@ -833,8 +891,17 @@ export default function Home() {
                     name="message"
                     required
                     rows={5}
+                    aria-invalid={fieldErrors.message ? "true" : undefined}
+                    aria-describedby={
+                      fieldErrors.message ? "message-error" : undefined
+                    }
                     className="input-field resize-none"
                   />
+                  {fieldErrors.message ? (
+                    <p id="message-error" className="field-error">
+                      {fieldErrors.message}
+                    </p>
+                  ) : null}
                 </div>
 
                 <div className="flex flex-wrap items-center gap-4">
@@ -855,7 +922,9 @@ export default function Home() {
                     ) : null}
                     {formStatus === "error" ? (
                       <span className="opacity-70">
-                        Something went wrong. Please try again in a moment.
+                        {Object.keys(fieldErrors).length > 0
+                          ? "Please fix the highlighted fields above."
+                          : "Something went wrong. Please try again in a moment."}
                       </span>
                     ) : null}
                   </p>
@@ -866,37 +935,54 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-black/10 dark:border-white/10">
-        <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-8 sm:flex-row sm:items-center sm:justify-between lg:px-8">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo-icon.png"
-              alt=""
-              width={28}
-              height={28}
-              aria-hidden
-              className="h-7 w-7"
-            />
-            <p className="text-sm opacity-70">DiforNet — Palakkad, Kerala</p>
+      <footer className="border-t border-black/10 pb-24 dark:border-white/10 md:pb-8">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 lg:px-8">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo-icon.png"
+                alt="DiforNet logo"
+                width={28}
+                height={28}
+                className="h-7 w-7"
+              />
+              <p className="text-sm opacity-70">
+                DiforNet — Palakkad, Kerala, India
+              </p>
+            </div>
+            <div className="flex items-center gap-6">
+              <span className="font-mono text-xs uppercase tracking-widest opacity-50">
+                © {new Date().getFullYear()}
+              </span>
+              <a
+                href="#top"
+                className="text-sm font-medium text-accent transition-opacity hover:opacity-80"
+              >
+                Back to top
+              </a>
+            </div>
           </div>
-          <div className="flex items-center gap-6">
-            <span className="font-mono text-xs uppercase tracking-widest opacity-50">
-              © {new Date().getFullYear()}
-            </span>
-            <a
-              href="#top"
-              className="text-sm font-medium text-accent transition-opacity hover:opacity-80"
-            >
-              Back to top
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-black/10 pt-6 text-sm opacity-70 dark:border-white/10">
+            <a href="/privacy" className="hover:text-accent hover:opacity-100">
+              Privacy Policy
+            </a>
+            <a href="/terms" className="hover:text-accent hover:opacity-100">
+              Terms of Service
             </a>
           </div>
         </div>
       </footer>
 
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white px-6 py-3 dark:border-white/10 dark:bg-off-black md:hidden">
+        <a href="#contact" className="btn-primary block w-full py-3 text-sm">
+          Start a Project
+        </a>
+      </div>
+
       <a
         href="#top"
         aria-label="Back to top"
-        className={`btn-icon fixed bottom-6 right-6 z-40 h-11 w-11 bg-white transition-opacity duration-200 dark:bg-off-black ${
+        className={`btn-icon fixed bottom-24 right-6 z-40 h-11 w-11 bg-white transition-opacity duration-200 dark:bg-off-black md:bottom-6 ${
           showBackToTop
             ? "pointer-events-auto opacity-100"
             : "pointer-events-none opacity-0"
