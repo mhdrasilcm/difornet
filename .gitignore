@@ -1,69 +1,64 @@
 ```
+# Next.js
+.next/
+out/
+
 # Dependencies
 node_modules/
+
+# Environment variables
+.env.local
+.env
+.env.*
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+*.lcov
 
 # Build outputs
 dist/
 build/
-.next/
-out/
+target/
 
-# Environment variables
-.env
-.env.local
-.env.*
+# Cache
+.cache/
+.nyc_output/
+.pytest_cache/
+.mypy_cache/
+.vitepress/cache/
 
-# IDE files
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# Logs
-*.log
-
-# Temporary files
-*.tmp
-
-# Coverage
-coverage/
-htmlcov/
-.coverage
-
-# Python
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-pip-log.txt
-pip-delete-this-directory.txt
-.tox/
-.coverage*
-.nox/
-.pytest_cache/
-.mypy_cache/
-
-# Node.js
+# Browsers
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-node_modules/
-jspm_packages/
 
-# Compiled JavaScript
-*.js.map
-*.ts.map
+# Temporary files
+*.tmp
+*.temp
 
-# OS generated files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
+# Compression artifacts
+*.zip
+*.tar.*
+*.gz
+*.rar
+*.7z
+
+# Fonts and images (if generated)
+*.woff
+*.woff2
+*.ttf
+*.eot
 ```

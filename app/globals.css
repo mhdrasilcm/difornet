@@ -20,6 +20,8 @@
   --on-accent: var(--color-white);
   --shadow-dark: color-mix(in srgb, var(--color-off-black) 14%, transparent);
   --shadow-light: color-mix(in srgb, var(--color-white) 90%, transparent);
+  --glow-primary: rgba(52, 211, 153, 0.15);
+  --glow-secondary: rgba(27, 58, 107, 0.1);
 }
 
 :root.dark {
@@ -30,6 +32,8 @@
   --on-accent: var(--color-off-black);
   --shadow-dark: color-mix(in srgb, var(--color-white) 10%, transparent);
   --shadow-light: color-mix(in srgb, var(--color-off-black) 90%, transparent);
+  --glow-primary: rgba(52, 211, 153, 0.25);
+  --glow-secondary: rgba(52, 211, 153, 0.15);
 }
 
 html {
@@ -55,6 +59,31 @@ body {
     transparent 50%,
     color-mix(in srgb, var(--accent) 5%, transparent) 100%
   );
+  position: relative;
+}
+
+.gradient-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 0%,
+    var(--glow-primary),
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: gradient-glow 8s ease-in-out infinite;
+}
+
+@keyframes gradient-glow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
 }
 
 .gradient-text {
@@ -66,6 +95,17 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  background-size: 200% auto;
+  animation: gradient-shift 5s ease infinite;
+}
+
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }
 
 /* ---------- Spatial depth system ---------- */
@@ -111,17 +151,35 @@ body {
 @keyframes orb-pulse {
   0%, 100% {
     opacity: 0.22;
-    transform: scale(1);
+    transform: scale(1) translate(0, 0);
   }
-  50% {
+  33% {
     opacity: 0.3;
-    transform: scale(1.05);
+    transform: scale(1.05) translate(10px, -10px);
+  }
+  66% {
+    opacity: 0.25;
+    transform: scale(0.95) translate(-10px, 10px);
   }
 }
 
 .spatial-layer {
   position: relative;
   z-index: 1;
+}
+
+/* Floating animation for decorative elements */
+.float-animation {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 /* ---------- Text & accents ---------- */
@@ -148,7 +206,7 @@ body {
   box-shadow:
     5px 5px 10px var(--shadow-dark),
     -5px -5px 10px var(--shadow-light);
-  transition: opacity 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -163,7 +221,7 @@ body {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2),
+    rgba(255, 255, 255, 0.3),
     transparent
   );
   transition: left 0.5s ease;
@@ -173,19 +231,37 @@ body {
   left: 100%;
 }
 
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.2),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::after {
+  opacity: 1;
+}
+
 .btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-2px);
+  opacity: 0.95;
+  transform: translateY(-3px) scale(1.02);
   box-shadow:
-    7px 7px 14px var(--shadow-dark),
-    -7px -7px 14px var(--shadow-light);
+    8px 8px 16px var(--shadow-dark),
+    -8px -8px 16px var(--shadow-light),
+    0 0 20px var(--glow-primary);
 }
 
 .btn-primary:active {
   box-shadow:
     inset 3px 3px 6px var(--shadow-dark),
     inset -3px -3px 6px var(--shadow-light);
-  transform: translateY(0);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
@@ -200,7 +276,7 @@ body {
   box-shadow:
     4px 4px 8px var(--shadow-dark),
     -4px -4px 8px var(--shadow-light);
-  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
@@ -212,8 +288,8 @@ body {
   left: 0;
   width: 0;
   height: 100%;
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  transition: width 0.3s ease;
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: -1;
 }
 
@@ -224,10 +300,11 @@ body {
 .btn-secondary:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.02);
   box-shadow:
-    6px 6px 12px var(--shadow-dark),
-    -6px -6px 12px var(--shadow-light);
+    8px 8px 16px var(--shadow-dark),
+    -8px -8px 16px var(--shadow-light),
+    0 0 15px var(--glow-secondary);
 }
 
 .btn-icon {
@@ -240,16 +317,17 @@ body {
   box-shadow:
     3px 3px 6px var(--shadow-dark),
     -3px -3px 6px var(--shadow-light);
-  transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-icon:hover {
   border-color: var(--accent);
   color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-3px) scale(1.05);
   box-shadow:
     5px 5px 10px var(--shadow-dark),
-    -5px -5px 10px var(--shadow-light);
+    -5px -5px 10px var(--shadow-light),
+    0 0 12px var(--glow-primary);
 }
 
 /* ---------- Menu toggle — desktop-safe hide ---------- */
@@ -319,7 +397,7 @@ body {
   box-shadow:
     6px 6px 14px var(--shadow-dark),
     -6px -6px 14px var(--shadow-light);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease, background-color 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -332,7 +410,7 @@ body {
   height: 100%;
   background: linear-gradient(
     135deg,
-    color-mix(in srgb, var(--accent) 5%, transparent) 0%,
+    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
     transparent 50%
   );
   opacity: 0;
@@ -340,16 +418,41 @@ body {
   pointer-events: none;
 }
 
+.bento-tile::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--accent) 20%, transparent),
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  transition: width 0.5s ease, height 0.5s ease, opacity 0.4s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .bento-tile:hover::before {
   opacity: 1;
 }
 
+.bento-tile:hover::after {
+  width: 300px;
+  height: 300px;
+  opacity: 0.5;
+}
+
 .bento-tile:hover {
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-6px) scale(1.02);
   border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow:
     12px 12px 28px var(--shadow-dark),
-    -12px -12px 28px var(--shadow-light);
+    -12px -12px 28px var(--shadow-light),
+    0 0 25px var(--glow-primary);
 }
 
 .bento-feature {
@@ -363,7 +466,7 @@ body {
   box-shadow:
     8px 8px 18px var(--shadow-dark),
     -8px -8px 18px var(--shadow-light);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -395,11 +498,12 @@ body {
 }
 
 .bento-feature:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-6px) scale(1.02);
   border-color: color-mix(in srgb, var(--accent) 60%, transparent);
   box-shadow:
     14px 14px 32px var(--shadow-dark),
-    -14px -14px 32px var(--shadow-light);
+    -14px -14px 32px var(--shadow-light),
+    0 0 30px var(--glow-primary);
 }
 
 .bento-feature-glow::before {
@@ -414,6 +518,16 @@ body {
   opacity: 0.12;
   pointer-events: none;
   border-radius: 9999px;
+  animation: bento-float 6s ease-in-out infinite;
+}
+
+@keyframes bento-float {
+  0%, 100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-10px) scale(1.05);
+  }
 }
 
 .bento-index {
@@ -459,6 +573,18 @@ body {
   box-shadow:
     8px 8px 18px var(--shadow-dark),
     -8px -8px 18px var(--shadow-light);
+}
+
+.hover-lift {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow:
+    12px 12px 24px var(--shadow-dark),
+    -12px -12px 24px var(--shadow-light),
+    0 0 20px var(--glow-primary);
 }
 
 /* ---------- Work visual panel ---------- */
