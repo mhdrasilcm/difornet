@@ -95,11 +95,7 @@ export default function TermsPage() {
           </p>
         </section>
 
-        <p className="text-sm opacity-60">
-          This page is provided as a general template and does not
-          constitute legal advice. Consider having it reviewed by a legal
-          professional for your specific circumstances and jurisdiction.
-        </p>
+        
       </div>
 
       <a
