@@ -12,45 +12,13 @@ import {
   BackToTop,
   MobileCTA,
 } from "@/components/sections";
-import { NavLink, Service, Work, Stat, FAQ, Theme } from "@/types";
+import { NavLink, Stat, FAQ, Theme } from "@/types";
 
 const navLinks: NavLink[] = [
   { label: "Services", href: "#services", id: "services" },
   { label: "Works", href: "#works", id: "works" },
   { label: "FAQ", href: "#faq", id: "faq" },
   { label: "Contact", href: "#contact", id: "contact" },
-];
-
-const services: Service[] = [
-  {
-    title: "Websites",
-    description:
-      "Marketing sites, school and business websites, and content-driven pages built to load fast and stay maintainable.",
-  },
-  {
-    title: "Web Apps",
-    description: "Full-stack products with real logins, dashboards, and data.",
-  },
-  {
-    title: "Android Apps",
-    description: "Native and cross-platform apps shipped to real users.",
-  },
-  {
-    title: "Embedded & IoT",
-    description: "Firmware and hardware-connected software.",
-  },
-];
-
-const works: Work[] = [
-  {
-    title: "HSS Mundur",
-    subtitle: "School Website",
-    description:
-      "A public website built for a government higher secondary school, covering admissions, staff, and announcements.",
-  },
-  { title: "The Golden Pitch", subtitle: "Fan Site" },
-  { title: "Sulthan Flooring Experts", subtitle: "Client Website" },
-  { title: "DiforNet", subtitle: "This Site" },
 ];
 
 const stats: Stat[] = [
@@ -180,8 +148,8 @@ export default function Home() {
 
       <main id="top">
         <HeroSection stats={stats} />
-        <ServicesSection services={services} />
-        <WorksSection works={works} />
+        <ServicesSection />
+        <WorksSection />
         <FAQSection faqs={faqs} />
         <ContactSection siteUrl={process.env.NEXT_PUBLIC_SITE_URL} />
       </main>
