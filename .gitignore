@@ -11,13 +11,6 @@ node_modules/
 .env
 .env.*
 
-# Logs
-*.log
-
-# Coverage
-coverage/
-*.lcov
-
 # Build outputs
 dist/
 build/
@@ -26,9 +19,12 @@ target/
 # Cache
 .cache/
 .nyc_output/
-.pytest_cache/
-.mypy_cache/
-.vitepress/cache/
+coverage/
+.nyc_output/
+.jest/
+
+# Logs
+*.log
 
 # OS generated files
 .DS_Store
@@ -40,25 +36,15 @@ Thumbs.db
 *.swp
 *.swo
 
-# Browsers
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
 
 # Temporary files
 *.tmp
 *.temp
-
-# Compression artifacts
-*.zip
-*.tar.*
-*.gz
-*.rar
-*.7z
-
-# Fonts and images (if generated)
-*.woff
-*.woff2
-*.ttf
-*.eot
 ```
