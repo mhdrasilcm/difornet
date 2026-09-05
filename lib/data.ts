@@ -53,9 +53,9 @@ export const services: Service[] = [
 export const works: Work[] = [
   {
     id: 'project-1',
-    title: 'E-Commerce Platform',
-    description: 'A full-featured online store with inventory management, payment processing, and real-time analytics dashboard.',
-    tags: ['Next.js', 'Stripe', 'PostgreSQL'],
+    title: 'Flooring Company Portfolio',
+    description: 'A full-featured Portfolio for a local flooring contract company.',
+    tags: ['HTML', 'Web3Forms'],
     imageUrl: '/placeholder-ecommerce.jpg',
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_1,
     envKey: 'NEXT_PUBLIC_PROJECT_URL_1',
@@ -63,9 +63,9 @@ export const works: Work[] = [
   },
   {
     id: 'project-2',
-    title: 'Healthcare Dashboard',
-    description: 'Patient management system with appointment scheduling, medical records, and telemedicine integration.',
-    tags: ['React', 'Node.js', 'MongoDB'],
+    title: 'The Golden Pitch',
+    description: 'A Lionel Messi fan site',
+    tags: ['HTML', 'Github Actions'],
     imageUrl: '/placeholder-healthcare.jpg',
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_2,
     envKey: 'NEXT_PUBLIC_PROJECT_URL_2',
@@ -73,13 +73,13 @@ export const works: Work[] = [
   },
   {
     id: 'project-3',
-    title: 'IoT Smart Home',
-    description: 'Control your home devices remotely with this intuitive smart home automation platform.',
-    tags: ['IoT', 'MQTT', 'React Native'],
+    title: 'VulnerAI',
+    description: 'coming soon.',
+    tags: ['Next.js', 'MQTT', 'React Native'],
     imageUrl: '/placeholder-iot.jpg',
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_3,
     envKey: 'NEXT_PUBLIC_PROJECT_URL_3',
-    status: 'live',
+    status: 'coming-soon',
   },
   {
     id: 'project-4',
