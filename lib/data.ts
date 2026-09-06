@@ -73,20 +73,11 @@ export const works: Work[] = [
   },
   {
     id: 'project-3',
-    title: 'VulnerAI',
-    description: 'coming soon.',
-    tags: ['Next.js', 'MQTT', 'React Native'],
-    imageUrl: '/placeholder-iot.jpg',
-    liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_3,
-    envKey: 'NEXT_PUBLIC_PROJECT_URL_3',
-    status: 'coming-soon',
-  },
-  {
-    id: 'project-4',
     title: 'Coming Soon',
     description: 'Exciting new project in development. Stay tuned for updates!',
     tags: ['In Progress'],
     imageUrl: '',
     status: 'coming-soon',
   },
+  
 ];
