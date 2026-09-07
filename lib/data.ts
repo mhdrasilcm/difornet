@@ -56,7 +56,9 @@ export const works: Work[] = [
     title: 'Flooring Company Portfolio',
     description: 'A full-featured Portfolio for a local flooring contract company.',
     tags: ['HTML', 'Web3Forms'],
-    imageUrl: '/placeholder-ecommerce.jpg',
+    // No screenshot asset yet — leave empty so the card falls back to the
+    // built-in placeholder instead of requesting a file that 404s.
+    imageUrl: '',
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_1,
     envKey: 'NEXT_PUBLIC_PROJECT_URL_1',
     status: 'live',
@@ -66,7 +68,7 @@ export const works: Work[] = [
     title: 'The Golden Pitch',
     description: 'A Lionel Messi fan site',
     tags: ['HTML', 'Github Actions'],
-    imageUrl: '/placeholder-healthcare.jpg',
+    imageUrl: '',
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_2,
     envKey: 'NEXT_PUBLIC_PROJECT_URL_2',
     status: 'live',
@@ -79,5 +81,5 @@ export const works: Work[] = [
     imageUrl: '',
     status: 'coming-soon',
   },
-  
+
 ];

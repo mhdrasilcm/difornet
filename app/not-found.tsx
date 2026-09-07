@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Page Not Found",
@@ -21,12 +22,12 @@ export default function NotFound() {
           moved. Let&apos;s get you back on track.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a href="/" className="btn-primary px-7 py-3.5 text-sm">
+          <Link href="/" className="btn-primary px-7 py-3.5 text-sm">
             Back to home
-          </a>
-          <a href="/#contact" className="btn-secondary px-7 py-3.5 text-sm">
+          </Link>
+          <Link href="/#contact" className="btn-secondary px-7 py-3.5 text-sm">
             Contact DiforNet
-          </a>
+          </Link>
         </div>
       </div>
     </div>

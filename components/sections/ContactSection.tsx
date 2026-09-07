@@ -151,16 +151,16 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
                 required
                 autoComplete="name"
                 aria-invalid={fieldErrors.name ? "true" : undefined}
-                aria-describedby={
-                  fieldErrors.name ? "name-error" : undefined
-                }
+                aria-describedby="name-error"
                 className="input-field"
               />
-              {fieldErrors.name ? (
-                <p id="name-error" className="field-error">
-                  {fieldErrors.name}
-                </p>
-              ) : null}
+              <p
+                id="name-error"
+                className="field-error"
+                data-visible={fieldErrors.name ? "true" : "false"}
+              >
+                {fieldErrors.name}
+              </p>
             </div>
 
             <div>
@@ -177,16 +177,16 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
                 required
                 autoComplete="email"
                 aria-invalid={fieldErrors.email ? "true" : undefined}
-                aria-describedby={
-                  fieldErrors.email ? "email-error" : undefined
-                }
+                aria-describedby="email-error"
                 className="input-field"
               />
-              {fieldErrors.email ? (
-                <p id="email-error" className="field-error">
-                  {fieldErrors.email}
-                </p>
-              ) : null}
+              <p
+                id="email-error"
+                className="field-error"
+                data-visible={fieldErrors.email ? "true" : "false"}
+              >
+                {fieldErrors.email}
+              </p>
             </div>
 
             <div>

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { SunIcon, MoonIcon, MenuIcon, CloseIcon } from "./Icons";
 import { NavLink } from "@/types";
 
@@ -23,12 +23,44 @@ export function Header({
   onToggleTheme,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const scrollPositionRef = useRef(0);
+  const toggleButtonRef = useRef<HTMLButtonElement | null>(null);
 
+  const closeMenu = useCallback(() => setMenuOpen(false), []);
+
+  // Robust scroll lock: plain `overflow: hidden` on the body doesn't stop
+  // touch scrolling on iOS Safari and can cause the page to visibly jump
+  // if the scrollbar disappears. Pinning the body to `position: fixed` at
+  // its current scroll offset blocks scroll on every platform and we
+  // restore the exact position on close, so there's no jump either way.
   useEffect(() => {
-    document.body.style.overflow = menuOpen ? "hidden" : "";
+    if (!menuOpen) return;
+
+    scrollPositionRef.current = window.scrollY;
+    document.body.style.top = `-${scrollPositionRef.current}px`;
+    document.body.setAttribute("data-scroll-locked", "true");
+
     return () => {
-      document.body.style.overflow = "";
+      document.body.removeAttribute("data-scroll-locked");
+      document.body.style.top = "";
+      window.scrollTo(0, scrollPositionRef.current);
     };
+  }, [menuOpen]);
+
+  // Close on Escape and return focus to the toggle button so keyboard/
+  // screen-reader users aren't left inside a menu that's no longer there.
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setMenuOpen(false);
+        toggleButtonRef.current?.focus();
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [menuOpen]);
 
   return (
@@ -91,7 +123,7 @@ export function Header({
             type="button"
             onClick={onToggleTheme}
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-            className="btn-icon h-10 w-10"
+            className="btn-icon h-11 w-11"
           >
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
@@ -102,43 +134,60 @@ export function Header({
             Start a Project
           </a>
           <button
+            ref={toggleButtonRef}
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="btn-icon menu-toggle h-10 w-10"
+            aria-controls="mobile-menu"
+            className="btn-icon menu-toggle h-11 w-11"
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu — absolutely positioned so it overlays the page
+          instead of pushing content down (no layout jump), and sits in
+          its own stacking context above everything except the scroll
+          progress bar. */}
       {menuOpen ? (
-        <nav className="border-t border-black/10 bg-white px-6 py-4 dark:border-white/10 dark:bg-off-black md:hidden">
-          <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
-            {navLinks.map((link) => (
-              <li key={link.href}>
-                <a
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className={`block py-3 text-sm font-medium ${
-                    activeSection === link.id ? "text-accent" : "opacity-80"
-                  }`}
-                >
-                  {link.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-          <a
-            href="#contact"
-            onClick={() => setMenuOpen(false)}
-            className="btn-primary mt-4 w-full px-5 py-3 text-sm"
+        <>
+          <button
+            type="button"
+            aria-label="Close menu"
+            tabIndex={-1}
+            onClick={closeMenu}
+            className="fixed inset-x-0 bottom-0 top-16 z-40 bg-black/20 backdrop-blur-[1px] md:hidden"
+          />
+          <nav
+            id="mobile-menu"
+            className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-black/10 bg-white px-6 py-4 shadow-lg dark:border-white/10 dark:bg-off-black md:hidden"
           >
-            Start a Project
-          </a>
-        </nav>
+            <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    onClick={closeMenu}
+                    className={`flex min-h-11 items-center py-3 text-sm font-medium ${
+                      activeSection === link.id ? "text-accent" : "opacity-80"
+                    }`}
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#contact"
+              onClick={closeMenu}
+              className="btn-primary mt-4 w-full px-5 py-3 text-sm"
+            >
+              Start a Project
+            </a>
+          </nav>
+        </>
       ) : null}
     </header>
   );

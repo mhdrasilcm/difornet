@@ -77,6 +77,11 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  // Lets the page draw under the iOS status bar / home-indicator safe
+  // areas so `env(safe-area-inset-*)` resolves to real values instead of
+  // 0 — required for the sticky mobile CTA and cookie banner to clear the
+  // home-indicator gesture area cleanly.
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#111111" },

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Thank You",
@@ -21,12 +22,12 @@ export default function ThankYouPage() {
           scope, timeline, and next steps.
         </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-          <a href="/" className="btn-primary px-7 py-3.5 text-sm">
+          <Link href="/" className="btn-primary px-7 py-3.5 text-sm">
             Back to home
-          </a>
-          <a href="/#works" className="btn-secondary px-7 py-3.5 text-sm">
+          </Link>
+          <Link href="/#works" className="btn-secondary px-7 py-3.5 text-sm">
             See past work
-          </a>
+          </Link>
         </div>
       </div>
     </div>

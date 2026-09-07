@@ -22,6 +22,10 @@
   --shadow-light: color-mix(in srgb, var(--color-white) 90%, transparent);
   --glow-primary: rgba(52, 211, 153, 0.15);
   --glow-secondary: rgba(27, 58, 107, 0.1);
+  /* Total height of the sticky mobile CTA bar (content only, safe-area
+     handled separately). Used to keep the cookie banner, back-to-top
+     button, and footer padding all in sync with a single source of truth. */
+  --mobile-cta-h: 4.5rem;
 }
 
 :root.dark {
@@ -50,29 +54,772 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ---------- Gradient backgrounds ---------- */
-
-.gradient-bg {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
-    transparent 50%,
-    color-mix(in srgb, var(--accent) 5%, transparent) 100%
-  );
-  position: relative;
+/* When the mobile menu is open we lock scroll via a fixed body position
+   (see Header.tsx). This keeps that state from ever introducing a
+   horizontal scrollbar or width jump caused by scrollbar removal. */
+body[data-scroll-locked="true"] {
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+  width: 100%;
 }
 
-.gradient-bg::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at 50% 0%,
-    var(--glow-primary),
-    transparent 70%
-  );
-  pointer-events: none;
-  animation: gradient-glow 8s ease-in-out infinite;
+/*
+  ---------------------------------------------------------------------------
+  All custom component classes below are wrapped in @layer components.
+
+  Why: Tailwind's utilities (including responsive variants like `md:hidden`)
+  are emitted in an `@layer utilities` block that is ordered AFTER
+  `@layer components` in the cascade, regardless of where either block
+  appears in the source file. Any custom class declared OUTSIDE a layer is
+  "unlayered" and beats every layered rule (components AND utilities) on
+  specificity ties. That's what caused `.btn-icon`'s `display: inline-flex`
+  to beat `md:hidden` and made the hamburger menu show up on desktop.
+  Keeping every custom class inside @layer components guarantees Tailwind
+  utilities always win when they need to, without any `!important` hacks.
+  ---------------------------------------------------------------------------
+*/
+@layer components {
+  /* ---------- Gradient backgrounds ---------- */
+
+  .gradient-bg {
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+      transparent 50%,
+      color-mix(in srgb, var(--accent) 5%, transparent) 100%
+    );
+    position: relative;
+  }
+
+  .gradient-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at 50% 0%,
+      var(--glow-primary),
+      transparent 70%
+    );
+    pointer-events: none;
+    animation: gradient-glow 8s ease-in-out infinite;
+  }
+
+  .gradient-text {
+    background: linear-gradient(
+      135deg,
+      var(--accent) 0%,
+      color-mix(in srgb, var(--accent) 70%, var(--foreground)) 100%
+    );
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    background-size: 200% auto;
+    animation: gradient-shift 5s ease infinite;
+  }
+
+  /* ---------- Spatial depth system ---------- */
+
+  .neumo-raised {
+    box-shadow:
+      6px 6px 14px var(--shadow-dark),
+      -6px -6px 14px var(--shadow-light);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .neumo-raised-sm {
+    box-shadow:
+      4px 4px 9px var(--shadow-dark),
+      -4px -4px 9px var(--shadow-light);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .neumo-inset {
+    box-shadow:
+      inset 4px 4px 9px var(--shadow-dark),
+      inset -4px -4px 9px var(--shadow-light);
+  }
+
+  .neumo-raised-lg {
+    box-shadow:
+      10px 10px 22px var(--shadow-dark),
+      -10px -10px 22px var(--shadow-light);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .spatial-orb {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(90px);
+    opacity: 0.22;
+    background: var(--accent);
+    pointer-events: none;
+    z-index: 0;
+    animation: orb-pulse 8s ease-in-out infinite;
+    /* Orbs are decorative and can render larger than their container;
+       contain them so they never introduce horizontal scroll on mobile. */
+    max-width: 100vw;
+  }
+
+  .spatial-layer {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Floating animation for decorative elements */
+  .float-animation {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  /* ---------- Text & accents ---------- */
+
+  .text-accent {
+    color: var(--accent);
+  }
+
+  .bg-accent {
+    background-color: var(--accent);
+  }
+
+  /* ---------- Buttons ---------- */
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    background-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    min-height: 2.75rem;
+    box-shadow:
+      5px 5px 10px var(--shadow-dark),
+      -5px -5px 10px var(--shadow-light);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    /* Keep animated pseudo-elements + transform on their own compositor
+       layer so hover/active transitions stay smooth and never trigger a
+       layout-level scroll jump. */
+    will-change: transform;
+  }
+
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: left 0.5s ease;
+  }
+
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.2),
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .btn-primary:active {
+    box-shadow:
+      inset 3px 3px 6px var(--shadow-dark),
+      inset -3px -3px 6px var(--shadow-light);
+    transform: translateY(0) scale(0.98);
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+    color: var(--foreground);
+    font-weight: 600;
+    min-height: 2.75rem;
+    box-shadow:
+      4px 4px 8px var(--shadow-dark),
+      -4px -4px 8px var(--shadow-light);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease,
+      border-color 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-secondary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: color-mix(in srgb, var(--accent) 15%, transparent);
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+  }
+
+  .btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9999px;
+    border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
+    color: var(--foreground);
+    /* Hard floor so every icon button meets the 44x44px touch target
+       minimum even if a smaller height/width utility is applied
+       alongside it. */
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+    box-shadow:
+      3px 3px 6px var(--shadow-dark),
+      -3px -3px 6px var(--shadow-light);
+    transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), color 0.3s ease,
+      border-color 0.3s ease;
+  }
+
+  .btn-icon:active {
+    transform: scale(0.94);
+  }
+
+  /* ---------- Hover-only interactions ----------
+     Gated behind (hover: hover) and (pointer: fine) so touch devices never
+     get stuck in a hover/glow/tilt state after a tap — on touch, :hover
+     styles persist until the user taps elsewhere, which reads as a stuck
+     or broken card. Devices with a real pointer (mouse/trackpad) still get
+     the full glassmorphism/orb/tilt treatment. */
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary:hover::after {
+      opacity: 1;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.95;
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light),
+        0 0 20px var(--glow-primary);
+    }
+
+    .btn-secondary:hover::before {
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow:
+        8px 8px 16px var(--shadow-dark),
+        -8px -8px 16px var(--shadow-light),
+        0 0 15px var(--glow-secondary);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-3px) scale(1.05);
+      box-shadow:
+        5px 5px 10px var(--shadow-dark),
+        -5px -5px 10px var(--shadow-light),
+        0 0 12px var(--glow-primary);
+    }
+
+    .bento-tile:hover::before {
+      opacity: 1;
+    }
+
+    .bento-tile:hover::after {
+      width: 300px;
+      height: 300px;
+      opacity: 0.5;
+    }
+
+    .bento-tile:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+      box-shadow:
+        12px 12px 28px var(--shadow-dark),
+        -12px -12px 28px var(--shadow-light),
+        0 0 25px var(--glow-primary);
+    }
+
+    .bento-feature:hover {
+      transform: translateY(-6px) scale(1.02);
+      border-color: color-mix(in srgb, var(--accent) 60%, transparent);
+      box-shadow:
+        14px 14px 32px var(--shadow-dark),
+        -14px -14px 32px var(--shadow-light),
+        0 0 30px var(--glow-primary);
+    }
+
+    .stat-tile:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--accent) 30%, transparent);
+      box-shadow:
+        8px 8px 18px var(--shadow-dark),
+        -8px -8px 18px var(--shadow-light);
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow:
+        12px 12px 24px var(--shadow-dark),
+        -12px -12px 24px var(--shadow-light),
+        0 0 20px var(--glow-primary);
+    }
+
+    .faq-card:hover {
+      border-color: color-mix(in srgb, var(--accent) 35%, transparent);
+      transform: translateY(-2px);
+      box-shadow:
+        7px 7px 16px var(--shadow-dark),
+        -7px -7px 16px var(--shadow-light);
+    }
+
+    .icon-chip-tilt:hover {
+      transform: rotate(-6deg) scale(1.08);
+    }
+  }
+
+  /* On touch devices, give an immediate but brief :active feedback instead
+     of a lingering :hover state, so tapping a card still feels responsive. */
+  @media (hover: none) {
+    .bento-tile:active,
+    .bento-feature:active,
+    .stat-tile:active,
+    .faq-card:active,
+    .hover-lift:active {
+      transform: scale(0.98);
+      transition-duration: 0.15s;
+    }
+  }
+
+  /* ---------- Menu toggle ----------
+     No !important needed: because this class now lives inside
+     @layer components, Tailwind's `md:hidden` utility (in the later
+     `utilities` layer) always wins at >=768px regardless of source order. */
+  .menu-toggle {
+    display: inline-flex;
+  }
+
+  /* ---------- Inputs ---------- */
+
+  .input-field {
+    width: 100%;
+    /* Locked to 16px regardless of any ancestor font-size utility — iOS
+       Safari auto-zooms on focus for any input with an effective font size
+       under 16px, which is a jarring, jumpy zoom on mobile. */
+    font-size: 16px;
+    border-radius: 0.75rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
+    background-color: var(--background);
+    color: var(--foreground);
+    padding: 0.75rem 1rem;
+    box-shadow:
+      inset 3px 3px 7px var(--shadow-dark),
+      inset -3px -3px 7px var(--shadow-light);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .input-field:hover {
+    border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
+    transform: translateY(-1px);
+  }
+
+  .input-field:focus {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    transform: translateY(0);
+    box-shadow:
+      inset 2px 2px 5px var(--shadow-dark),
+      inset -2px -2px 5px var(--shadow-light);
+  }
+
+  .input-field[aria-invalid="true"] {
+    outline: 2px solid color-mix(in srgb, var(--foreground) 45%, transparent);
+    outline-offset: 1px;
+  }
+
+  /* Always rendered (see ContactSection.tsx) with a reserved min-height,
+     and faded in/out rather than mounted/unmounted, so a validation error
+     never pushes the rest of the form down when it appears. */
+  .field-error {
+    margin-top: 0.375rem;
+    min-height: 1.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.125rem;
+    font-weight: 600;
+    color: var(--foreground);
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .field-error[data-visible="true"] {
+    opacity: 0.75;
+    transform: translateY(0);
+  }
+
+  /* ---------- Bento tiles ---------- */
+
+  .bento-tile {
+    position: relative;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background-color: var(--background);
+    padding: 1.75rem;
+    box-shadow:
+      6px 6px 14px var(--shadow-dark),
+      -6px -6px 14px var(--shadow-light);
+    transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease;
+    overflow: hidden;
+  }
+
+  .bento-tile::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+      transparent 50%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+
+  .bento-tile::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent) 20%, transparent),
+      transparent 70%
+    );
+    transform: translate(-50%, -50%);
+    transition: width 0.5s ease, height 0.5s ease, opacity 0.4s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bento-feature {
+    position: relative;
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    background:
+      radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 14%, transparent), transparent 65%),
+      var(--background);
+    padding: 1.75rem;
+    box-shadow:
+      8px 8px 18px var(--shadow-dark),
+      -8px -8px 18px var(--shadow-light);
+    transition: box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.4s ease;
+    overflow: hidden;
+  }
+
+  .bento-feature::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--accent) 8%, transparent) 0%,
+      transparent 70%
+    );
+    animation: feature-glow-pulse 6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .bento-feature-glow::before {
+    content: "";
+    position: absolute;
+    top: -40%;
+    right: -30%;
+    width: 70%;
+    height: 140%;
+    background: var(--accent);
+    filter: blur(70px);
+    opacity: 0.12;
+    pointer-events: none;
+    border-radius: 9999px;
+    animation: bento-float 6s ease-in-out infinite;
+  }
+
+  .bento-index {
+    font-family: var(--font-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+  }
+
+  /* ---------- Icon chip ---------- */
+
+  .icon-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.85rem;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+    box-shadow:
+      inset 2px 2px 5px var(--shadow-dark),
+      inset -2px -2px 5px var(--shadow-light);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* ---------- Stat tile ---------- */
+
+  .stat-tile {
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background-color: var(--background);
+    padding: 1.25rem 1.5rem;
+    box-shadow:
+      5px 5px 12px var(--shadow-dark),
+      -5px -5px 12px var(--shadow-light);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+
+  /* ---------- Work visual panel ---------- */
+
+  .work-visual {
+    position: absolute;
+    inset: 0;
+    border-radius: 1.25rem;
+    background:
+      linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
+      repeating-linear-gradient(
+        45deg,
+        color-mix(in srgb, var(--foreground) 4%, transparent),
+        color-mix(in srgb, var(--foreground) 4%, transparent) 12px,
+        transparent 12px,
+        transparent 24px
+      );
+    opacity: 0.7;
+    pointer-events: none;
+  }
+
+  .work-badge {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border-radius: 9999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    background: var(--background);
+    color: var(--accent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    box-shadow:
+      2px 2px 5px var(--shadow-dark),
+      -2px -2px 5px var(--shadow-light);
+  }
+
+  /* ---------- Work preview modal ---------- */
+
+  .work-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: color-mix(in srgb, var(--color-off-black) 65%, transparent);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  @media (min-width: 640px) {
+    .work-modal-backdrop {
+      padding: 1.5rem;
+    }
+  }
+
+  .work-modal-panel {
+    position: relative;
+    background-color: var(--background);
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (min-width: 640px) {
+    .work-modal-panel {
+      width: min(100%, 72rem);
+      height: min(100%, 42rem);
+      border-radius: 1.25rem;
+      box-shadow:
+        16px 16px 36px var(--shadow-dark),
+        -16px -16px 36px var(--shadow-light);
+    }
+  }
+
+  /* ---------- FAQ card ---------- */
+
+  .faq-card {
+    border-radius: 1.25rem;
+    border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
+    background-color: var(--background);
+    padding: 1.5rem 1.75rem;
+    box-shadow:
+      5px 5px 12px var(--shadow-dark),
+      -5px -5px 12px var(--shadow-light);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  }
+
+  .faq-card[open] {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    box-shadow:
+      9px 9px 20px var(--shadow-dark),
+      -9px -9px 20px var(--shadow-light);
+    transform: translateY(-1px);
+  }
+
+  .faq-item summary {
+    cursor: pointer;
+    list-style: none;
+    /* Whole summary row is tappable and comfortably exceeds 44px. */
+    min-height: 2.75rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .faq-item[open] .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* ---------- Section heading ---------- */
+
+  .section-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--font-mono), monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .section-rule {
+    height: 1px;
+    flex: 1;
+    background-color: color-mix(in srgb, var(--foreground) 12%, transparent);
+  }
+
+  /* ---------- Grid backdrop ---------- */
+
+  .grid-backdrop {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px);
+    background-size: 56px 56px;
+    -webkit-mask-image: linear-gradient(to bottom, black, transparent);
+    mask-image: linear-gradient(to bottom, black, transparent);
+    pointer-events: none;
+  }
+
+  /* ---------- Loading skeleton ---------- */
+
+  .skeleton-block {
+    border-radius: 0.9rem;
+    background-color: var(--background);
+    box-shadow:
+      inset 3px 3px 7px var(--shadow-dark),
+      inset -3px -3px 7px var(--shadow-light);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .skeleton-block::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    transform: translateX(-100%);
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in srgb, var(--foreground) 6%, transparent),
+      transparent
+    );
+    animation: skeleton-shimmer 1.6s ease-in-out infinite;
+  }
+
+  /* ---------- Cookie banner ---------- */
+
+  .cookie-banner {
+    background-color: var(--background);
+    box-shadow:
+      0 -6px 14px var(--shadow-dark),
+      0 6px 14px var(--shadow-light);
+    /* Extend the tappable/visual surface under the iOS home-indicator area
+       instead of letting content sit flush against it. Requires
+       viewport-fit=cover (set in layout.tsx) for the env() value to be
+       non-zero. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* ---------- Sticky mobile CTA ---------- */
+
+  .mobile-cta-bar {
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
 }
 
 @keyframes gradient-glow {
@@ -86,19 +833,6 @@ body {
   }
 }
 
-.gradient-text {
-  background: linear-gradient(
-    135deg,
-    var(--accent) 0%,
-    color-mix(in srgb, var(--accent) 70%, var(--foreground)) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  background-size: 200% auto;
-  animation: gradient-shift 5s ease infinite;
-}
-
 @keyframes gradient-shift {
   0%, 100% {
     background-position: 0% 50%;
@@ -106,46 +840,6 @@ body {
   50% {
     background-position: 100% 50%;
   }
-}
-
-/* ---------- Spatial depth system ---------- */
-
-.neumo-raised {
-  box-shadow:
-    6px 6px 14px var(--shadow-dark),
-    -6px -6px 14px var(--shadow-light);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.neumo-raised-sm {
-  box-shadow:
-    4px 4px 9px var(--shadow-dark),
-    -4px -4px 9px var(--shadow-light);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.neumo-inset {
-  box-shadow:
-    inset 4px 4px 9px var(--shadow-dark),
-    inset -4px -4px 9px var(--shadow-light);
-}
-
-.neumo-raised-lg {
-  box-shadow:
-    10px 10px 22px var(--shadow-dark),
-    -10px -10px 22px var(--shadow-light);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.spatial-orb {
-  position: absolute;
-  border-radius: 9999px;
-  filter: blur(90px);
-  opacity: 0.22;
-  background: var(--accent);
-  pointer-events: none;
-  z-index: 0;
-  animation: orb-pulse 8s ease-in-out infinite;
 }
 
 @keyframes orb-pulse {
@@ -163,16 +857,6 @@ body {
   }
 }
 
-.spatial-layer {
-  position: relative;
-  z-index: 1;
-}
-
-/* Floating animation for decorative elements */
-.float-animation {
-  animation: float 6s ease-in-out infinite;
-}
-
 @keyframes float {
   0%, 100% {
     transform: translateY(0);
@@ -180,310 +864,6 @@ body {
   50% {
     transform: translateY(-20px);
   }
-}
-
-/* ---------- Text & accents ---------- */
-
-.text-accent {
-  color: var(--accent);
-}
-
-.bg-accent {
-  background-color: var(--accent);
-}
-
-/* ---------- Buttons ---------- */
-
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  background-color: var(--accent);
-  color: var(--on-accent);
-  font-weight: 600;
-  box-shadow:
-    5px 5px 10px var(--shadow-dark),
-    -5px -5px 10px var(--shadow-light);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.3),
-    transparent
-  );
-  transition: left 0.5s ease;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-.btn-primary::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    circle at center,
-    rgba(255, 255, 255, 0.2),
-    transparent 70%
-  );
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.btn-primary:hover::after {
-  opacity: 1;
-}
-
-.btn-primary:hover {
-  opacity: 0.95;
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:
-    8px 8px 16px var(--shadow-dark),
-    -8px -8px 16px var(--shadow-light),
-    0 0 20px var(--glow-primary);
-}
-
-.btn-primary:active {
-  box-shadow:
-    inset 3px 3px 6px var(--shadow-dark),
-    inset -3px -3px 6px var(--shadow-light);
-  transform: translateY(0) scale(0.98);
-}
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-  color: var(--foreground);
-  font-weight: 600;
-  box-shadow:
-    4px 4px 8px var(--shadow-dark),
-    -4px -4px 8px var(--shadow-light);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-secondary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 100%;
-  background: color-mix(in srgb, var(--accent) 15%, transparent);
-  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: -1;
-}
-
-.btn-secondary:hover::before {
-  width: 100%;
-}
-
-.btn-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow:
-    8px 8px 16px var(--shadow-dark),
-    -8px -8px 16px var(--shadow-light),
-    0 0 15px var(--glow-secondary);
-}
-
-.btn-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 9999px;
-  border: 1px solid color-mix(in srgb, var(--foreground) 15%, transparent);
-  color: var(--foreground);
-  box-shadow:
-    3px 3px 6px var(--shadow-dark),
-    -3px -3px 6px var(--shadow-light);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.btn-icon:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-3px) scale(1.05);
-  box-shadow:
-    5px 5px 10px var(--shadow-dark),
-    -5px -5px 10px var(--shadow-light),
-    0 0 12px var(--glow-primary);
-}
-
-/* ---------- Menu toggle — desktop-safe hide ---------- */
-/* Tailwind's md:hidden sets display:none at >=768px, but .btn-icon's
-   display:inline-flex has higher specificity and wins. This rule
-   forces the toggle off on desktop regardless of source order. */
-.menu-toggle {
-  display: inline-flex;
-}
-
-@media (min-width: 768px) {
-  .menu-toggle {
-    display: none !important;
-  }
-}
-
-/* ---------- Inputs ---------- */
-
-.input-field {
-  width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 10%, transparent);
-  background-color: var(--background);
-  color: var(--foreground);
-  padding: 0.75rem 1rem;
-  box-shadow:
-    inset 3px 3px 7px var(--shadow-dark),
-    inset -3px -3px 7px var(--shadow-light);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.input-field:hover {
-  border-color: color-mix(in srgb, var(--foreground) 20%, transparent);
-  transform: translateY(-1px);
-}
-
-.input-field:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-  transform: translateY(0);
-  box-shadow:
-    inset 2px 2px 5px var(--shadow-dark),
-    inset -2px -2px 5px var(--shadow-light);
-}
-
-.input-field[aria-invalid="true"] {
-  outline: 2px solid color-mix(in srgb, var(--foreground) 45%, transparent);
-  outline-offset: 1px;
-}
-
-.field-error {
-  margin-top: 0.375rem;
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: var(--foreground);
-  opacity: 0.75;
-}
-
-/* ---------- Bento tiles ---------- */
-
-.bento-tile {
-  position: relative;
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-  background-color: var(--background);
-  padding: 1.75rem;
-  box-shadow:
-    6px 6px 14px var(--shadow-dark),
-    -6px -6px 14px var(--shadow-light);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-.bento-tile::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
-    transparent 50%
-  );
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
-}
-
-.bento-tile::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 20%, transparent),
-    transparent 70%
-  );
-  transform: translate(-50%, -50%);
-  transition: width 0.5s ease, height 0.5s ease, opacity 0.4s ease;
-  opacity: 0;
-  pointer-events: none;
-}
-
-.bento-tile:hover::before {
-  opacity: 1;
-}
-
-.bento-tile:hover::after {
-  width: 300px;
-  height: 300px;
-  opacity: 0.5;
-}
-
-.bento-tile:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  box-shadow:
-    12px 12px 28px var(--shadow-dark),
-    -12px -12px 28px var(--shadow-light),
-    0 0 25px var(--glow-primary);
-}
-
-.bento-feature {
-  position: relative;
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
-  background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 14%, transparent), transparent 65%),
-    var(--background);
-  padding: 1.75rem;
-  box-shadow:
-    8px 8px 18px var(--shadow-dark),
-    -8px -8px 18px var(--shadow-light);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-}
-
-.bento-feature::after {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(
-    circle,
-    color-mix(in srgb, var(--accent) 8%, transparent) 0%,
-    transparent 70%
-  );
-  animation: feature-glow-pulse 6s ease-in-out infinite;
-  pointer-events: none;
 }
 
 @keyframes feature-glow-pulse {
@@ -497,30 +877,6 @@ body {
   }
 }
 
-.bento-feature:hover {
-  transform: translateY(-6px) scale(1.02);
-  border-color: color-mix(in srgb, var(--accent) 60%, transparent);
-  box-shadow:
-    14px 14px 32px var(--shadow-dark),
-    -14px -14px 32px var(--shadow-light),
-    0 0 30px var(--glow-primary);
-}
-
-.bento-feature-glow::before {
-  content: "";
-  position: absolute;
-  top: -40%;
-  right: -30%;
-  width: 70%;
-  height: 140%;
-  background: var(--accent);
-  filter: blur(70px);
-  opacity: 0.12;
-  pointer-events: none;
-  border-radius: 9999px;
-  animation: bento-float 6s ease-in-out infinite;
-}
-
 @keyframes bento-float {
   0%, 100% {
     transform: translateY(0) scale(1);
@@ -530,219 +886,10 @@ body {
   }
 }
 
-.bento-index {
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  color: var(--accent);
-}
-
-/* ---------- Icon chip ---------- */
-
-.icon-chip {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 0.85rem;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
-  box-shadow:
-    inset 2px 2px 5px var(--shadow-dark),
-    inset -2px -2px 5px var(--shadow-light);
-}
-
-/* ---------- Stat tile ---------- */
-
-.stat-tile {
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-  background-color: var(--background);
-  padding: 1.25rem 1.5rem;
-  box-shadow:
-    5px 5px 12px var(--shadow-dark),
-    -5px -5px 12px var(--shadow-light);
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.stat-tile:hover {
-  transform: translateY(-3px);
-  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow:
-    8px 8px 18px var(--shadow-dark),
-    -8px -8px 18px var(--shadow-light);
-}
-
-.hover-lift {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow:
-    12px 12px 24px var(--shadow-dark),
-    -12px -12px 24px var(--shadow-light),
-    0 0 20px var(--glow-primary);
-}
-
-/* ---------- Work visual panel ---------- */
-
-.work-visual {
-  position: absolute;
-  inset: 0;
-  border-radius: 1.25rem;
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), transparent 60%),
-    repeating-linear-gradient(
-      45deg,
-      color-mix(in srgb, var(--foreground) 4%, transparent),
-      color-mix(in srgb, var(--foreground) 4%, transparent) 12px,
-      transparent 12px,
-      transparent 24px
-    );
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-.work-badge {
-  position: relative;
-  z-index: 1;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  border-radius: 9999px;
-  padding: 0.25rem 0.7rem;
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  background: var(--background);
-  color: var(--accent);
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  box-shadow:
-    2px 2px 5px var(--shadow-dark),
-    -2px -2px 5px var(--shadow-light);
-}
-
-/* ---------- FAQ card ---------- */
-
-.faq-card {
-  border-radius: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--foreground) 8%, transparent);
-  background-color: var(--background);
-  padding: 1.5rem 1.75rem;
-  box-shadow:
-    5px 5px 12px var(--shadow-dark),
-    -5px -5px 12px var(--shadow-light);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-}
-
-.faq-card:hover {
-  border-color: color-mix(in srgb, var(--accent) 35%, transparent);
-  transform: translateY(-2px);
-  box-shadow:
-    7px 7px 16px var(--shadow-dark),
-    -7px -7px 16px var(--shadow-light);
-}
-
-.faq-card[open] {
-  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
-  box-shadow:
-    9px 9px 20px var(--shadow-dark),
-    -9px -9px 20px var(--shadow-light);
-  transform: translateY(-1px);
-}
-
-.faq-item summary {
-  cursor: pointer;
-  list-style: none;
-}
-
-.faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-icon {
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.faq-item[open] .faq-icon {
-  transform: rotate(45deg);
-}
-
-/* ---------- Section heading ---------- */
-
-.section-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-mono), monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.section-rule {
-  height: 1px;
-  flex: 1;
-  background-color: color-mix(in srgb, var(--foreground) 12%, transparent);
-}
-
-/* ---------- Grid backdrop ---------- */
-
-.grid-backdrop {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(to right, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px),
-    linear-gradient(to bottom, color-mix(in srgb, var(--foreground) 6%, transparent) 1px, transparent 1px);
-  background-size: 56px 56px;
-  -webkit-mask-image: linear-gradient(to bottom, black, transparent);
-  mask-image: linear-gradient(to bottom, black, transparent);
-  pointer-events: none;
-}
-
-/* ---------- Loading skeleton ---------- */
-
-.skeleton-block {
-  border-radius: 0.9rem;
-  background-color: var(--background);
-  box-shadow:
-    inset 3px 3px 7px var(--shadow-dark),
-    inset -3px -3px 7px var(--shadow-light);
-  position: relative;
-  overflow: hidden;
-}
-
-.skeleton-block::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--foreground) 6%, transparent),
-    transparent
-  );
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
-}
-
 @keyframes skeleton-shimmer {
   100% {
     transform: translateX(100%);
   }
-}
-
-/* ---------- Cookie banner ---------- */
-
-.cookie-banner {
-  background-color: var(--background);
-  box-shadow:
-    0 -6px 14px var(--shadow-dark),
-    0 6px 14px var(--shadow-light);
 }
 
 /* ---------- Focus ---------- */
@@ -761,6 +908,15 @@ textarea:focus-visible {
   }
 
   .skeleton-block::after {
+    animation: none;
+  }
+
+  .gradient-bg::before,
+  .gradient-text,
+  .spatial-orb,
+  .float-animation,
+  .bento-feature::after,
+  .bento-feature-glow::before {
     animation: none;
   }
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Terms of Service",
@@ -98,12 +99,12 @@ export default function TermsPage() {
         
       </div>
 
-      <a
+      <Link
         href="/"
         className="btn-secondary mt-14 inline-flex px-6 py-3 text-sm"
       >
         Back to home
-      </a>
+      </Link>
     </div>
   );
 }

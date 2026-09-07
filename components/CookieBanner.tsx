@@ -23,6 +23,10 @@ export default function CookieBanner() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    // localStorage isn't available during server rendering, so this has
+    // to run after mount rather than during render (which would risk a
+    // hydration mismatch).
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setConsent(getCookieConsent());
     setMounted(true);
   }, []);
@@ -42,7 +46,7 @@ export default function CookieBanner() {
       role="dialog"
       aria-live="polite"
       aria-label="Cookie consent"
-      className="cookie-banner fixed inset-x-0 bottom-[60px] z-[70] md:bottom-0"
+      className="cookie-banner fixed inset-x-0 bottom-[calc(var(--mobile-cta-h)+env(safe-area-inset-bottom,0px))] z-[70] md:bottom-0"
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-4 px-6 py-5 sm:flex-row sm:items-center sm:justify-between lg:px-8">
         <p className="max-w-2xl text-sm leading-relaxed opacity-80">

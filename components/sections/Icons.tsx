@@ -1,5 +1,3 @@
-import { type ReactNode } from "react";
-
 export function SunIcon({ className = "h-5 w-5" }: { className?: string }) {
   return (
     <svg

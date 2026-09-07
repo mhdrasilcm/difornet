@@ -83,7 +83,12 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
+    // Reading localStorage/matchMedia during render (instead of here)
+    // would return different values on the server vs. the client and
+    // cause a hydration mismatch, so this genuinely needs to run
+    // post-mount rather than be derived during render.
     const initialTheme = getInitialTheme();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(initialTheme);
     document.documentElement.classList.toggle("dark", initialTheme === "dark");
     setMounted(true);

@@ -19,7 +19,9 @@ export function BackToTop() {
     <a
       href="#top"
       aria-label="Back to top"
-      className={`btn-icon fixed bottom-24 right-6 z-40 h-11 w-11 bg-white transition-opacity duration-200 dark:bg-off-black md:bottom-6 ${
+      // bottom-[...] on mobile clears the sticky CTA bar (--mobile-cta-h)
+      // plus the iOS home-indicator safe area so it never overlaps it.
+      className={`btn-icon fixed bottom-[calc(var(--mobile-cta-h)+env(safe-area-inset-bottom,0px)+0.75rem)] right-6 z-40 h-11 w-11 bg-white transition-opacity duration-200 dark:bg-off-black md:bottom-6 ${
         showBackToTop
           ? "pointer-events-auto opacity-100"
           : "pointer-events-none opacity-0"
@@ -42,7 +44,7 @@ export function BackToTop() {
 
 export function MobileCTA() {
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white px-6 py-3 dark:border-white/10 dark:bg-off-black md:hidden">
+    <div className="mobile-cta-bar fixed inset-x-0 bottom-0 z-40 border-t border-black/10 bg-white px-6 pt-3 dark:border-white/10 dark:bg-off-black md:hidden">
       <a href="#contact" className="btn-primary block w-full py-3 text-sm">
         Start a Project
       </a>
@@ -52,7 +54,11 @@ export function MobileCTA() {
 
 export function Footer() {
   return (
-    <footer className="border-t border-black/10 pb-24 dark:border-white/10 md:pb-8">
+    <footer
+      // Bottom padding clears the sticky mobile CTA + safe area on
+      // mobile; back to the normal 8 once the CTA is hidden at md:.
+      className="border-t border-black/10 pb-[calc(var(--mobile-cta-h)+env(safe-area-inset-bottom,0px))] dark:border-white/10 md:pb-8"
+    >
       <div className="mx-auto flex max-w-6xl flex-col gap-6 px-6 py-8 lg:px-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-center gap-3">
