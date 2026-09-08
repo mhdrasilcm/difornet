@@ -68,7 +68,7 @@ export default function OpengraphImage() {
             maxWidth: 900,
           }}
         >
-          Web, mobile, Android & embedded software — built by a one-person
+          Web, mobile, APIs & cloud infrastructure — built by a one-person
           studio.
         </div>
       </div>

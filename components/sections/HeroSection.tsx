@@ -37,7 +37,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
         >
           A one-person studio building{" "}
           <span className="gradient-text inline-block mt-2">
-            web, mobile, and embedded software.
+            web, mobile, and cloud software.
           </span>
         </motion.h1>
 

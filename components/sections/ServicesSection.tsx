@@ -15,15 +15,16 @@ export function ServicesSection() {
       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
         <SectionHeading index="01" eyebrow="What I Do" title="Services" />
 
-        {/* 1 column on mobile, 2 from md, 3 from lg. With 4 services this
-            leaves one orphan slot on the 3-col row, so the last card is
-            rendered as a wide `bento-feature` tile spanning the remaining
-            space instead of sitting alone — a deliberate bento-style
-            layout rather than an awkward gap. */}
+        {/* 1 column on mobile, 2 from md, 3 from lg. Only give the
+            trailing card the wide `bento-feature` treatment when it would
+            otherwise sit alone in the final lg row (i.e. total count % 3
+            === 1) — with 5 services the last row is a balanced pair, so
+            no special-casing is needed there. */}
         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {services.map((service, index) => {
             const IconComponent = service.icon;
-            const isLast = index === services.length - 1;
+            const isOrphan =
+              index === services.length - 1 && services.length % 3 === 1;
 
             return (
               <motion.div
@@ -32,11 +33,11 @@ export function ServicesSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true, margin: "-80px" }}
-                className={`group ${isLast ? "md:col-span-2 lg:col-span-1" : ""}`}
+                className={`group ${isOrphan ? "md:col-span-2 lg:col-span-1" : ""}`}
               >
                 <div
                   className={`relative h-full p-7 ${
-                    isLast ? "bento-tile bento-feature" : "bento-tile"
+                    isOrphan ? "bento-tile bento-feature" : "bento-tile"
                   }`}
                 >
                   <div className="icon-chip icon-chip-tilt mb-5">

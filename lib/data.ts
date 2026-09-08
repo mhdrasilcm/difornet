@@ -1,4 +1,4 @@
-import { Code, Globe, Smartphone, Cpu } from 'lucide-react';
+import { Smartphone, Layers, Database, Zap, Palette } from 'lucide-react';
 
 export interface Service {
   id: string;
@@ -21,32 +21,39 @@ export interface Work {
 
 export const services: Service[] = [
   {
-    id: 'websites',
-    title: 'Websites',
-    description: 'Modern, responsive websites that look great on any device. Built with the latest technologies for speed and SEO.',
-    features: ['Responsive Design', 'SEO Optimized', 'Fast Loading', 'Mobile First'],
-    icon: Globe,
+    id: 'full-stack-web',
+    title: 'Full-Stack Web Architecture',
+    description: 'High-performance web applications, serverless backends, edge deployments, and responsive frontends built with Next.js, React, and TypeScript.',
+    features: ['Next.js & React', 'Serverless Backends', 'Edge Deployments', 'Responsive Frontends'],
+    icon: Layers,
   },
   {
-    id: 'web-apps',
-    title: 'Web Applications',
-    description: 'Powerful web applications tailored to your business needs. From dashboards to complex SaaS platforms.',
-    features: ['Custom Functionality', 'Scalable Architecture', 'Secure & Reliable', 'Real-time Updates'],
-    icon: Code,
-  },
-  {
-    id: 'android-apps',
-    title: 'Android Apps',
-    description: 'Native and cross-platform Android applications that provide smooth user experiences.',
-    features: ['Native Performance', 'Cross-platform Support', 'Intuitive UI/UX', 'Play Store Ready'],
+    id: 'mobile-apps',
+    title: 'Native & Cross-Platform Mobile Apps',
+    description: 'High-performance Android applications and responsive mobile-first utilities, built on clean architecture with optimized runtime memory management.',
+    features: ['Native Android', 'Cross-Platform Utilities', 'Clean Architecture', 'Optimized Runtime Memory'],
     icon: Smartphone,
   },
   {
-    id: 'embedded-iot',
-    title: 'Embedded & IoT',
-    description: 'Smart solutions connecting hardware and software. From microcontrollers to full IoT ecosystems.',
-    features: ['Hardware Integration', 'Sensor Networks', 'Cloud Connectivity', 'Real-time Monitoring'],
-    icon: Cpu,
+    id: 'apis-cloud',
+    title: 'Custom APIs & Cloud Infrastructure',
+    description: 'Scalable REST/GraphQL backends with thoughtful database schema design, microservices, authentication systems, and cloud edge routing.',
+    features: ['REST & GraphQL APIs', 'PostgreSQL / Supabase', 'Microservices', 'Auth & Edge Routing'],
+    icon: Database,
+  },
+  {
+    id: 'performance',
+    title: 'Performance & Speed Optimization',
+    description: 'Core Web Vitals refinement, asset caching, bundle-size optimization, and low-latency execution for a zero-bloat codebase.',
+    features: ['Core Web Vitals', 'Asset Caching', 'Bundle-Size Optimization', 'Low-Latency Execution'],
+    icon: Zap,
+  },
+  {
+    id: 'ui-ux-systems',
+    title: 'UI/UX System Design',
+    description: 'Dark-mode neumorphism, responsive Bento grid design systems, interactive prototypes, and conversion-focused web layouts.',
+    features: ['Dark-Mode Neumorphism', 'Bento Grid Systems', 'Interactive Prototypes', 'Conversion-Focused Layouts'],
+    icon: Palette,
   },
 ];
 

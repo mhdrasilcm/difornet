@@ -32,7 +32,7 @@ const faqs: FAQ[] = [
   {
     question: "Who builds the sites?",
     answer:
-      "DiforNet is a one-person studio. Every website, app, and embedded project is designed and built directly by the founder in Palakkad, Kerala.",
+      "DiforNet is a one-person studio. Every website, app, and API is designed and built directly by the founder in Palakkad, Kerala.",
   },
   {
     question: "How does a project start?",
@@ -47,12 +47,12 @@ const faqs: FAQ[] = [
   {
     question: "How long does a typical project take?",
     answer:
-      "A simple website usually takes one to two weeks. Web apps, Android apps, and embedded projects vary based on complexity and are scoped individually after the first conversation.",
+      "A simple website usually takes one to two weeks. Web apps, Android apps, and API/cloud projects vary based on complexity and are scoped individually after the first conversation.",
   },
   {
     question: "What technologies do you work with?",
     answer:
-      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and standard embedded toolchains for hardware-connected projects.",
+      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and PostgreSQL/Supabase with cloud edge routing for APIs and infrastructure.",
   },
   {
     question: "Do you offer support after launch?",

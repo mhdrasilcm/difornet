@@ -23,8 +23,8 @@ export default function PrivacyPolicyPage() {
             1. Who we are
           </h2>
           <p className="mt-3">
-            DiforNet is a one-person web, mobile, Android, and embedded/IoT
-            development studio based in Palakkad, Kerala, India. This policy
+            DiforNet is a one-person web, mobile, Android, API, and cloud
+            infrastructure development studio based in Palakkad, Kerala, India. This policy
             explains what information is collected through this website
             (difornet.pages.dev) and how it is used.
           </p>

@@ -23,18 +23,18 @@ const siteUrl = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "DiforNet — Web, Mobile & Embedded Studio",
+    default: "DiforNet — Web, Mobile & Cloud Software Studio",
     template: "%s | DiforNet",
   },
   description:
-    "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
+    "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
   keywords: [
     "DiforNet",
     "web development Kerala",
     "Android app development Palakkad",
-    "embedded systems developer India",
+    "full-stack developer India",
     "freelance developer Kerala",
-    "IoT development studio",
+    "cloud & API development studio",
   ],
   authors: [{ name: "DiforNet" }],
   creator: "DiforNet",
@@ -46,23 +46,23 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteUrl,
     siteName: "DiforNet",
-    title: "DiforNet — Web, Mobile & Embedded Studio",
+    title: "DiforNet — Web, Mobile & Cloud Software Studio",
     description:
-      "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
+      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "DiforNet — Web, Mobile & Embedded Studio",
+        alt: "DiforNet — Web, Mobile & Cloud Software Studio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "DiforNet — Web, Mobile & Embedded Studio",
+    title: "DiforNet — Web, Mobile & Cloud Software Studio",
     description:
-      "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
+      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
     images: ["/opengraph-image"],
   },
   robots: {
@@ -93,7 +93,7 @@ const jsonLd = {
   "@type": "ProfessionalService",
   name: "DiforNet",
   description:
-    "One-person web, mobile, Android, and embedded/IoT development studio based in Palakkad, Kerala, India.",
+    "One-person web, mobile, Android, API, and cloud infrastructure development studio based in Palakkad, Kerala, India.",
   url: siteUrl,
   address: {
     "@type": "PostalAddress",

@@ -1,0 +1,245 @@
+diff --git a/app/layout.tsx b/app/layout.tsx
+index ffc1ccb5..38cf8d63 100644
+--- a/app/layout.tsx
++++ b/app/layout.tsx
+@@ -23,18 +23,18 @@ const siteUrl = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
+ export const metadata: Metadata = {
+   metadataBase: new URL(siteUrl),
+   title: {
+-    default: "DiforNet — Web, Mobile & Embedded Studio",
++    default: "DiforNet — Web, Mobile & Cloud Software Studio",
+     template: "%s | DiforNet",
+   },
+   description:
+-    "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
++    "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+   keywords: [
+     "DiforNet",
+     "web development Kerala",
+     "Android app development Palakkad",
+-    "embedded systems developer India",
++    "full-stack developer India",
+     "freelance developer Kerala",
+-    "IoT development studio",
++    "cloud & API development studio",
+   ],
+   authors: [{ name: "DiforNet" }],
+   creator: "DiforNet",
+@@ -46,23 +46,23 @@ export const metadata: Metadata = {
+     locale: "en_IN",
+     url: siteUrl,
+     siteName: "DiforNet",
+-    title: "DiforNet — Web, Mobile & Embedded Studio",
++    title: "DiforNet — Web, Mobile & Cloud Software Studio",
+     description:
+-      "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
++      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+     images: [
+       {
+         url: "/opengraph-image",
+         width: 1200,
+         height: 630,
+-        alt: "DiforNet — Web, Mobile & Embedded Studio",
++        alt: "DiforNet — Web, Mobile & Cloud Software Studio",
+       },
+     ],
+   },
+   twitter: {
+     card: "summary_large_image",
+-    title: "DiforNet — Web, Mobile & Embedded Studio",
++    title: "DiforNet — Web, Mobile & Cloud Software Studio",
+     description:
+-      "A one-person studio in Palakkad, Kerala building websites, web apps, Android apps, and embedded software.",
++      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+     images: ["/opengraph-image"],
+   },
+   robots: {
+@@ -93,7 +93,7 @@ const jsonLd = {
+   "@type": "ProfessionalService",
+   name: "DiforNet",
+   description:
+-    "One-person web, mobile, Android, and embedded/IoT development studio based in Palakkad, Kerala, India.",
++    "One-person web, mobile, Android, API, and cloud infrastructure development studio based in Palakkad, Kerala, India.",
+   url: siteUrl,
+   address: {
+     "@type": "PostalAddress",
+diff --git a/app/opengraph-image.tsx b/app/opengraph-image.tsx
+index ba7a63f3..d971d154 100644
+--- a/app/opengraph-image.tsx
++++ b/app/opengraph-image.tsx
+@@ -68,7 +68,7 @@ export default function OpengraphImage() {
+             maxWidth: 900,
+           }}
+         >
+-          Web, mobile, Android & embedded software — built by a one-person
++          Web, mobile, APIs & cloud infrastructure — built by a one-person
+           studio.
+         </div>
+       </div>
+diff --git a/app/page.tsx b/app/page.tsx
+index 10475616..120dee44 100644
+--- a/app/page.tsx
++++ b/app/page.tsx
+@@ -32,7 +32,7 @@ const faqs: FAQ[] = [
+   {
+     question: "Who builds the sites?",
+     answer:
+-      "DiforNet is a one-person studio. Every website, app, and embedded project is designed and built directly by the founder in Palakkad, Kerala.",
++      "DiforNet is a one-person studio. Every website, app, and API is designed and built directly by the founder in Palakkad, Kerala.",
+   },
+   {
+     question: "How does a project start?",
+@@ -47,12 +47,12 @@ const faqs: FAQ[] = [
+   {
+     question: "How long does a typical project take?",
+     answer:
+-      "A simple website usually takes one to two weeks. Web apps, Android apps, and embedded projects vary based on complexity and are scoped individually after the first conversation.",
++      "A simple website usually takes one to two weeks. Web apps, Android apps, and API/cloud projects vary based on complexity and are scoped individually after the first conversation.",
+   },
+   {
+     question: "What technologies do you work with?",
+     answer:
+-      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and standard embedded toolchains for hardware-connected projects.",
++      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and PostgreSQL/Supabase with cloud edge routing for APIs and infrastructure.",
+   },
+   {
+     question: "Do you offer support after launch?",
+diff --git a/app/privacy/page.tsx b/app/privacy/page.tsx
+index b66045b2..428fad28 100644
+--- a/app/privacy/page.tsx
++++ b/app/privacy/page.tsx
+@@ -23,8 +23,8 @@ export default function PrivacyPolicyPage() {
+             1. Who we are
+           </h2>
+           <p className="mt-3">
+-            DiforNet is a one-person web, mobile, Android, and embedded/IoT
+-            development studio based in Palakkad, Kerala, India. This policy
++            DiforNet is a one-person web, mobile, Android, API, and cloud
++            infrastructure development studio based in Palakkad, Kerala, India. This policy
+             explains what information is collected through this website
+             (difornet.pages.dev) and how it is used.
+           </p>
+diff --git a/components/sections/HeroSection.tsx b/components/sections/HeroSection.tsx
+index 72e9cea0..63e5575d 100644
+--- a/components/sections/HeroSection.tsx
++++ b/components/sections/HeroSection.tsx
+@@ -37,7 +37,7 @@ export function HeroSection({ stats }: HeroSectionProps) {
+         >
+           A one-person studio building{" "}
+           <span className="gradient-text inline-block mt-2">
+-            web, mobile, and embedded software.
++            web, mobile, and cloud software.
+           </span>
+         </motion.h1>
+ 
+diff --git a/components/sections/ServicesSection.tsx b/components/sections/ServicesSection.tsx
+index be4f4c7b..a27802be 100644
+--- a/components/sections/ServicesSection.tsx
++++ b/components/sections/ServicesSection.tsx
+@@ -15,15 +15,16 @@ export function ServicesSection() {
+       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
+         <SectionHeading index="01" eyebrow="What I Do" title="Services" />
+ 
+-        {/* 1 column on mobile, 2 from md, 3 from lg. With 4 services this
+-            leaves one orphan slot on the 3-col row, so the last card is
+-            rendered as a wide `bento-feature` tile spanning the remaining
+-            space instead of sitting alone — a deliberate bento-style
+-            layout rather than an awkward gap. */}
++        {/* 1 column on mobile, 2 from md, 3 from lg. Only give the
++            trailing card the wide `bento-feature` treatment when it would
++            otherwise sit alone in the final lg row (i.e. total count % 3
++            === 1) — with 5 services the last row is a balanced pair, so
++            no special-casing is needed there. */}
+         <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+           {services.map((service, index) => {
+             const IconComponent = service.icon;
+-            const isLast = index === services.length - 1;
++            const isOrphan =
++              index === services.length - 1 && services.length % 3 === 1;
+ 
+             return (
+               <motion.div
+@@ -32,11 +33,11 @@ export function ServicesSection() {
+                 whileInView={{ opacity: 1, y: 0 }}
+                 transition={{ duration: 0.5, delay: index * 0.1 }}
+                 viewport={{ once: true, margin: "-80px" }}
+-                className={`group ${isLast ? "md:col-span-2 lg:col-span-1" : ""}`}
++                className={`group ${isOrphan ? "md:col-span-2 lg:col-span-1" : ""}`}
+               >
+                 <div
+                   className={`relative h-full p-7 ${
+-                    isLast ? "bento-tile bento-feature" : "bento-tile"
++                    isOrphan ? "bento-tile bento-feature" : "bento-tile"
+                   }`}
+                 >
+                   <div className="icon-chip icon-chip-tilt mb-5">
+diff --git a/lib/data.ts b/lib/data.ts
+index 6a19ba25..3c8a7226 100644
+--- a/lib/data.ts
++++ b/lib/data.ts
+@@ -1,4 +1,4 @@
+-import { Code, Globe, Smartphone, Cpu } from 'lucide-react';
++import { Smartphone, Layers, Database, Zap, Palette } from 'lucide-react';
+ 
+ export interface Service {
+   id: string;
+@@ -21,32 +21,39 @@ export interface Work {
+ 
+ export const services: Service[] = [
+   {
+-    id: 'websites',
+-    title: 'Websites',
+-    description: 'Modern, responsive websites that look great on any device. Built with the latest technologies for speed and SEO.',
+-    features: ['Responsive Design', 'SEO Optimized', 'Fast Loading', 'Mobile First'],
+-    icon: Globe,
++    id: 'full-stack-web',
++    title: 'Full-Stack Web Architecture',
++    description: 'High-performance web applications, serverless backends, edge deployments, and responsive frontends built with Next.js, React, and TypeScript.',
++    features: ['Next.js & React', 'Serverless Backends', 'Edge Deployments', 'Responsive Frontends'],
++    icon: Layers,
+   },
+   {
+-    id: 'web-apps',
+-    title: 'Web Applications',
+-    description: 'Powerful web applications tailored to your business needs. From dashboards to complex SaaS platforms.',
+-    features: ['Custom Functionality', 'Scalable Architecture', 'Secure & Reliable', 'Real-time Updates'],
+-    icon: Code,
++    id: 'mobile-apps',
++    title: 'Native & Cross-Platform Mobile Apps',
++    description: 'High-performance Android applications and responsive mobile-first utilities, built on clean architecture with optimized runtime memory management.',
++    features: ['Native Android', 'Cross-Platform Utilities', 'Clean Architecture', 'Optimized Runtime Memory'],
++    icon: Smartphone,
+   },
+   {
+-    id: 'android-apps',
+-    title: 'Android Apps',
+-    description: 'Native and cross-platform Android applications that provide smooth user experiences.',
+-    features: ['Native Performance', 'Cross-platform Support', 'Intuitive UI/UX', 'Play Store Ready'],
+-    icon: Smartphone,
++    id: 'apis-cloud',
++    title: 'Custom APIs & Cloud Infrastructure',
++    description: 'Scalable REST/GraphQL backends with thoughtful database schema design, microservices, authentication systems, and cloud edge routing.',
++    features: ['REST & GraphQL APIs', 'PostgreSQL / Supabase', 'Microservices', 'Auth & Edge Routing'],
++    icon: Database,
++  },
++  {
++    id: 'performance',
++    title: 'Performance & Speed Optimization',
++    description: 'Core Web Vitals refinement, asset caching, bundle-size optimization, and low-latency execution for a zero-bloat codebase.',
++    features: ['Core Web Vitals', 'Asset Caching', 'Bundle-Size Optimization', 'Low-Latency Execution'],
++    icon: Zap,
+   },
+   {
+-    id: 'embedded-iot',
+-    title: 'Embedded & IoT',
+-    description: 'Smart solutions connecting hardware and software. From microcontrollers to full IoT ecosystems.',
+-    features: ['Hardware Integration', 'Sensor Networks', 'Cloud Connectivity', 'Real-time Monitoring'],
+-    icon: Cpu,
++    id: 'ui-ux-systems',
++    title: 'UI/UX System Design',
++    description: 'Dark-mode neumorphism, responsive Bento grid design systems, interactive prototypes, and conversion-focused web layouts.',
++    features: ['Dark-Mode Neumorphism', 'Bento Grid Systems', 'Interactive Prototypes', 'Conversion-Focused Layouts'],
++    icon: Palette,
+   },
+ ];
+ 
