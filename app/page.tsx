@@ -11,6 +11,7 @@ import {
   Footer,
   BackToTop,
   MobileCTA,
+  InstagramButton,
 } from "@/components/sections";
 import { NavLink, Stat, FAQ, Theme } from "@/types";
 
@@ -161,6 +162,7 @@ export default function Home() {
 
       <Footer />
       <MobileCTA />
+      <InstagramButton />
       <BackToTop />
     </div>
   );

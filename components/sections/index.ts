@@ -5,7 +5,7 @@ export { ServicesSection } from "./ServicesSection";
 export { WorksSection } from "./WorksSection";
 export { FAQSection } from "./FAQSection";
 export { ContactSection } from "./ContactSection";
-export { Footer, BackToTop, MobileCTA } from "./Footer";
+export { Footer, BackToTop, MobileCTA, InstagramButton } from "./Footer";
 export { SectionHeading } from "./SectionHeading";
 export { RevealLi, RevealDiv } from "./Reveal";
 export {
@@ -15,5 +15,6 @@ export {
   PlusIcon,
   MenuIcon,
   CloseIcon,
+  InstagramIcon,
   ServiceGlyph,
 } from "./Icons";

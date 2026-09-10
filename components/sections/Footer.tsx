@@ -2,6 +2,29 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { InstagramIcon } from "./Icons";
+
+export function InstagramButton() {
+  // Falls back to a placeholder handle if the env var isn't set, matching
+  // the same NEXT_PUBLIC_* pattern used for the Works project links.
+  const instagramUrl =
+    process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://instagram.com/difornet";
+
+  return (
+    <a
+      href={instagramUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label="Follow DiforNet on Instagram"
+      // Mirrors BackToTop's positioning (mobile CTA bar + safe-area
+      // clearance) but anchored bottom-left so the two floating buttons
+      // never overlap. Always visible, unlike BackToTop's scroll gate.
+      className="btn-icon fixed bottom-[calc(var(--mobile-cta-h)+env(safe-area-inset-bottom,0px)+0.75rem)] left-6 z-40 h-11 w-11 bg-white dark:bg-off-black md:bottom-6"
+    >
+      <InstagramIcon className="h-4 w-4" />
+    </a>
+  );
+}
 
 export function BackToTop() {
   const [showBackToTop, setShowBackToTop] = useState(false);
