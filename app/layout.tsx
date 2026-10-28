@@ -72,6 +72,11 @@ export const metadata: Metadata = {
   formatDetection: {
     telephone: false,
   },
+  // Google Search Console HTML-tag verification. Set
+  // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the "content" value it gives you.
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
 };
 
 export const viewport: Viewport = {
@@ -92,6 +97,12 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: "DiforNet",
+  alternateName: ["Difornet", "DiforNet Studio"],
+  image: `${siteUrl}/logo-icon.png`,
+  sameAs: [
+    "https://github.com/mhdrasilcm/difornet",
+    "https://instagram.com/difornet",
+  ],
   description:
     "One-person web, mobile, Android, API, and cloud infrastructure development studio based in Palakkad, Kerala, India.",
   url: siteUrl,
@@ -109,6 +120,14 @@ const jsonLd = {
   foundingDate: "2026",
 };
 
+const websiteJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "DiforNet",
+  alternateName: "Difornet",
+  url: siteUrl,
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
@@ -120,6 +139,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
       <body className="min-h-full flex flex-col">
