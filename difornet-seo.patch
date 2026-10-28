@@ -1,15 +1,15 @@
 diff --git a/app/layout.tsx b/app/layout.tsx
-index 38cf8d6..21c2179 100644
+index 38cf8d6..7249215 100644
 --- a/app/layout.tsx
 +++ b/app/layout.tsx
 @@ -72,6 +72,11 @@ export const metadata: Metadata = {
    formatDetection: {
      telephone: false,
    },
-+  // Google Search Console HTML-tag verification. Set
-+  // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the "content" value it gives you.
++  // Google Search Console HTML-tag verification. Don't remove this, even
++  // after verification succeeds, or the property becomes unverified.
 +  verification: {
-+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
++    google: "sFph9IuGIu6YvB8BN0p455LYOtRbaHjpLCaqExiKRrg",
 +  },
  };
  

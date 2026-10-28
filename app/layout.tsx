@@ -75,7 +75,7 @@ export const metadata: Metadata = {
   // Google Search Console HTML-tag verification. Set
   // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the "content" value it gives you.
   verification: {
-    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+    google: "sFph9IuGIu6YvB8BN0p455LYOtRbaHjpLCaqExiKRrg",
   },
 };
 
