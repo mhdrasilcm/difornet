@@ -13,20 +13,13 @@ import {
   MobileCTA,
   InstagramButton,
 } from "@/components/sections";
-import { NavLink, Stat, FAQ, Theme } from "@/types";
+import { NavLink, FAQ, Theme } from "@/types";
 
 const navLinks: NavLink[] = [
   { label: "Services", href: "#services", id: "services" },
   { label: "Works", href: "#works", id: "works" },
   { label: "FAQ", href: "#faq", id: "faq" },
   { label: "Contact", href: "#contact", id: "contact" },
-];
-
-const stats: Stat[] = [
-  { label: "Founded", value: "2026" },
-  { label: "Studio Size", value: "1 person" },
-  { label: "Disciplines", value: "4" },
-  { label: "Based In", value: "Kerala, IN" },
 ];
 
 const faqs: FAQ[] = [
@@ -38,7 +31,7 @@ const faqs: FAQ[] = [
   {
     question: "How does a project start?",
     answer:
-      "Send a message through the contact form below with a brief description of what you need. We will reply to discuss scope, timeline, and next steps before any work begins.",
+      "Send a message through the contact form below with a brief description of what you need. I will reply within 2 business days to discuss scope, timeline, and next steps before any work begins.",
   },
   {
     question: "How much does a project cost?",
@@ -48,12 +41,12 @@ const faqs: FAQ[] = [
   {
     question: "How long does a typical project take?",
     answer:
-      "A simple website usually takes one to two weeks. Web apps, Android apps, and API/cloud projects vary based on complexity and are scoped individually after the first conversation.",
+      "A simple website usually takes one to two weeks. Web apps, Android apps, and API projects vary based on complexity and are scoped individually after our first conversation.",
   },
   {
     question: "What technologies do you work with?",
     answer:
-      "Modern, well-supported tools: React and Next.js for the web, native and cross-platform frameworks for Android, and PostgreSQL/Supabase with cloud edge routing for APIs and infrastructure.",
+      "Clean HTML/CSS, React, Next.js, and TypeScript for the web; native tooling for Android; and PostgreSQL with Cloudflare or Vercel for hosting and APIs.",
   },
   {
     question: "Do you offer support after launch?",
@@ -84,10 +77,6 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState<string>("");
 
   useEffect(() => {
-    // Reading localStorage/matchMedia during render (instead of here)
-    // would return different values on the server vs. the client and
-    // cause a hydration mismatch, so this genuinely needs to run
-    // post-mount rather than be derived during render.
     const initialTheme = getInitialTheme();
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(initialTheme);
@@ -135,7 +124,7 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-full bg-white text-off-black dark:bg-off-black dark:text-white">
+    <div className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
       <a
         href="#top"
         className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[var(--on-accent)]"
@@ -153,7 +142,7 @@ export default function Home() {
       />
 
       <main id="top">
-        <HeroSection stats={stats} />
+        <HeroSection />
         <ServicesSection />
         <WorksSection />
         <FAQSection faqs={faqs} />

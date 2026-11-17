@@ -1,92 +1,82 @@
-import { Smartphone, Layers, Database, Zap, Palette } from 'lucide-react';
-
-export interface Service {
-  id: string;
-  title: string;
-  description: string;
-  features: string[];
-  icon: React.ComponentType<{ className?: string }>;
-}
-
-export interface Work {
-  id: string;
-  title: string;
-  description: string;
-  tags: string[];
-  imageUrl: string;
-  liveUrl?: string;
-  envKey?: string; // e.g., 'NEXT_PUBLIC_PROJECT_URL_1'
-  status: 'live' | 'coming-soon';
-}
+import type { Service, Work } from "@/types";
 
 export const services: Service[] = [
   {
-    id: 'full-stack-web',
-    title: 'Full-Stack Web Architecture',
-    description: 'High-performance web applications, serverless backends, edge deployments, and responsive frontends built with Next.js, React, and TypeScript.',
-    features: ['Next.js & React', 'Serverless Backends', 'Edge Deployments', 'Responsive Frontends'],
-    icon: Layers,
+    id: "websites",
+    index: "01",
+    title: "Business Websites & Portfolios",
+    description:
+      "Fast, custom-designed websites for local businesses, schools, and independent brands — built cleanly from scratch without bloated page builders.",
+    deliverables: [
+      "Custom responsive UI",
+      "Contact & inquiry wiring",
+      "SEO & metadata setup",
+    ],
   },
   {
-    id: 'mobile-apps',
-    title: 'Native & Cross-Platform Mobile Apps',
-    description: 'High-performance Android applications and responsive mobile-first utilities, built on clean architecture with optimized runtime memory management.',
-    features: ['Native Android', 'Cross-Platform Utilities', 'Clean Architecture', 'Optimized Runtime Memory'],
-    icon: Smartphone,
+    id: "web-apps",
+    index: "02",
+    title: "Full-Stack Web Applications",
+    description:
+      "Interactive web tools, client portals, and database-backed workflows built with React, Next.js, TypeScript, and PostgreSQL.",
+    deliverables: [
+      "Next.js & React",
+      "Auth & database design",
+      "Edge deployment",
+    ],
   },
   {
-    id: 'apis-cloud',
-    title: 'Custom APIs & Cloud Infrastructure',
-    description: 'Scalable REST/GraphQL backends with thoughtful database schema design, microservices, authentication systems, and cloud edge routing.',
-    features: ['REST & GraphQL APIs', 'PostgreSQL / Supabase', 'Microservices', 'Auth & Edge Routing'],
-    icon: Database,
+    id: "android",
+    index: "03",
+    title: "Android Applications",
+    description:
+      "Focused mobile utilities and client-ready Android apps designed for real-world devices, smooth navigation, and reliable offline behavior.",
+    deliverables: [
+      "Native Android UI",
+      "API & local storage sync",
+      "Play Store prep",
+    ],
   },
   {
-    id: 'performance',
-    title: 'Performance & Speed Optimization',
-    description: 'Core Web Vitals refinement, asset caching, bundle-size optimization, and low-latency execution for a zero-bloat codebase.',
-    features: ['Core Web Vitals', 'Asset Caching', 'Bundle-Size Optimization', 'Low-Latency Execution'],
-    icon: Zap,
-  },
-  {
-    id: 'ui-ux-systems',
-    title: 'UI/UX System Design',
-    description: 'Dark-mode neumorphism, responsive Bento grid design systems, interactive prototypes, and conversion-focused web layouts.',
-    features: ['Dark-Mode Neumorphism', 'Bento Grid Systems', 'Interactive Prototypes', 'Conversion-Focused Layouts'],
-    icon: Palette,
+    id: "care",
+    index: "04",
+    title: "APIs, Hosting & Ongoing Care",
+    description:
+      "Custom API endpoints, domain and SSL setup, performance tuning, and dependable post-launch support when you need updates.",
+    deliverables: [
+      "REST APIs & webhooks",
+      "Cloudflare / Vercel setup",
+      "Post-launch fixes",
+    ],
   },
 ];
 
 export const works: Work[] = [
   {
-    id: 'project-1',
-    title: 'Flooring Company Portfolio',
-    description: 'A full-featured Portfolio for a local flooring contract company.',
-    tags: ['HTML', 'Web3Forms'],
-    // No screenshot asset yet — leave empty so the card falls back to the
-    // built-in placeholder instead of requesting a file that 404s.
-    imageUrl: '',
+    id: "sulthan-flooring",
+    year: "2026",
+    category: "Local Business",
+    title: "Sulthan Flooring Experts",
+    description:
+      "A clean service showcase and quote-inquiry site for a flooring contract business in Mundur, Palakkad.",
+    outcome:
+      "Replaced scattered WhatsApp photos with a structured gallery, service breakdown, and direct Web3Forms quote request.",
+    tags: ["HTML / CSS", "Responsive UI", "Web3Forms"],
+    // Drop a real screenshot at public/works/sulthan-flooring.png when ready
+    imageUrl: "",
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_1,
-    envKey: 'NEXT_PUBLIC_PROJECT_URL_1',
-    status: 'live',
   },
   {
-    id: 'project-2',
-    title: 'The Golden Pitch',
-    description: 'A Lionel Messi fan site',
-    tags: ['HTML', 'Github Actions'],
-    imageUrl: '',
+    id: "the-golden-pitch",
+    year: "2026",
+    category: "Editorial Tribute",
+    title: "The Golden Pitch",
+    description:
+      "An interactive Lionel Messi editorial micro-site featuring career milestones, stats, and automated deployment.",
+    outcome:
+      "Built as a lightweight static experience with zero framework overhead and automated CI/CD via GitHub Actions.",
+    tags: ["HTML / CSS", "Interactive Layout", "GitHub Actions"],
+    imageUrl: "",
     liveUrl: process.env.NEXT_PUBLIC_PROJECT_URL_2,
-    envKey: 'NEXT_PUBLIC_PROJECT_URL_2',
-    status: 'live',
   },
-  {
-    id: 'project-3',
-    title: 'Coming Soon',
-    description: 'Exciting new project in development. Stay tuned for updates!',
-    tags: ['In Progress'],
-    imageUrl: '',
-    status: 'coming-soon',
-  },
-
 ];

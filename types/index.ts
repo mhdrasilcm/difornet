@@ -1,5 +1,3 @@
-// Type definitions for DiforNet portfolio
-
 export interface NavLink {
   label: string;
   href: string;
@@ -7,19 +5,23 @@ export interface NavLink {
 }
 
 export interface Service {
+  id: string;
+  index: string;
   title: string;
   description: string;
+  deliverables: string[];
 }
 
 export interface Work {
+  id: string;
+  year: string;
+  category: string;
   title: string;
-  subtitle: string;
-  description?: string;
-}
-
-export interface Stat {
-  label: string;
-  value: string;
+  description: string;
+  outcome: string;
+  tags: string[];
+  imageUrl?: string;
+  liveUrl?: string;
 }
 
 export interface FAQ {

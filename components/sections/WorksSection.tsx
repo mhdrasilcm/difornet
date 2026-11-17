@@ -1,36 +1,12 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SectionHeading } from "./SectionHeading";
-import { works, type Work } from "@/lib/data";
-import { ExternalLink, X, Play, Loader2, Construction } from "lucide-react";
-
-function ComingSoonCard({ work, index }: { work: Work; index: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      viewport={{ once: true, margin: "-80px" }}
-    >
-      <div className="bento-tile flex h-72 flex-col items-center justify-center p-8 text-center">
-        <div className="icon-chip mb-5 h-16 w-16">
-          <Construction className="h-7 w-7" aria-hidden />
-        </div>
-        <h3 className="text-xl font-bold tracking-tight">Coming Soon</h3>
-        <p className="mt-2 max-w-xs text-sm opacity-70">{work.description}</p>
-        <div className="mt-5 flex flex-wrap justify-center gap-2">
-          {work.tags.map((tag) => (
-            <span key={tag} className="work-badge">
-              {tag}
-            </span>
-          ))}
-        </div>
-      </div>
-    </motion.div>
-  );
-}
+import { works } from "@/lib/data";
+import { Work } from "@/types";
+import { ExternalLink, X, Play, Loader2 } from "lucide-react";
 
 function WorkCard({
   work,
@@ -42,70 +18,101 @@ function WorkCard({
   onPreview: (work: Work) => void;
 }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
+    <motion.article
+      initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      viewport={{ once: true, margin: "-80px" }}
-      className="group"
+      transition={{ duration: 0.45, delay: index * 0.08 }}
+      viewport={{ once: true, margin: "-60px" }}
+      className="studio-card studio-card-hover flex flex-col overflow-hidden"
     >
-      <div className="bento-tile relative flex h-72 flex-col overflow-hidden p-0">
-        <div className="work-visual" aria-hidden />
+      {/* Preview Frame */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[var(--border)] bg-[var(--surface)]">
+        {work.imageUrl ? (
+          <Image
+            src={work.imageUrl}
+            alt={`${work.title} preview`}
+            fill
+            className="object-cover object-top"
+          />
+        ) : (
+          <div className="paper-grain flex h-full flex-col justify-between p-6">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs uppercase tracking-widest text-muted">
+                {work.category}
+              </span>
+              <span className="font-mono text-xs text-muted">{work.year}</span>
+            </div>
+            <div>
+              <p className="font-display text-3xl italic tracking-tight opacity-85">
+                {work.title}
+              </p>
+              <div className="tri-stripe-bar mt-4 max-w-[96px]" aria-hidden>
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
 
-        <div className="relative flex flex-1 flex-col justify-between p-6">
+      {/* Details */}
+      <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
+        <div>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="font-mono text-xs uppercase tracking-wider text-accent">
+              {work.category}
+            </span>
+            <span className="font-mono text-xs text-muted">{work.year}</span>
+          </div>
+
+          <h3 className="font-display mt-2 text-2xl font-medium tracking-tight">
+            {work.title}
+          </h3>
+          <p className="mt-2.5 text-sm leading-relaxed text-muted">
+            {work.description}
+          </p>
+          <p className="mt-3 text-sm leading-relaxed opacity-90">
+            {work.outcome}
+          </p>
+        </div>
+
+        <div className="mt-6 pt-5 border-t border-[var(--border)]">
           <div className="flex flex-wrap gap-2">
             {work.tags.map((tag) => (
-              <span key={tag} className="work-badge">
+              <span key={tag} className="tag-pill">
                 {tag}
               </span>
             ))}
           </div>
 
-          <div>
-            <h3 className="text-xl font-bold tracking-tight">{work.title}</h3>
-            <p className="mt-2 text-sm leading-relaxed opacity-70 line-clamp-2">
-              {work.description}
-            </p>
-
-            {work.liveUrl ? (
-              <div className="mt-5 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => onPreview(work)}
-                  className="btn-primary flex-1 px-4 py-2.5 text-sm"
-                >
-                  <Play className="h-4 w-4" aria-hidden />
-                  Live Preview
-                </button>
-                <a
-                  href={work.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Open ${work.title} in a new tab`}
-                  className="btn-icon h-11 w-11 shrink-0"
-                >
-                  <ExternalLink className="h-4 w-4" aria-hidden />
-                </a>
-              </div>
-            ) : (
-              <div className="mt-5 flex items-center gap-2 text-sm opacity-60">
+          {work.liveUrl ? (
+            <div className="mt-5 flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => onPreview(work)}
+                className="btn-primary flex-1 px-5 py-2.5 text-sm"
+              >
                 <Play className="h-4 w-4" aria-hidden />
-                Project preview coming soon
-              </div>
-            )}
-          </div>
+                Interactive Preview
+              </button>
+              <a
+                href={work.liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${work.title} in a new tab`}
+                className="btn-icon h-11 w-11 shrink-0"
+              >
+                <ExternalLink className="h-4 w-4" aria-hidden />
+              </a>
+            </div>
+          ) : null}
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
 
-/**
- * Full-screen, touch-friendly preview modal. Rendered as a fixed overlay
- * (not inline inside the card) so it gets real screen real-estate on
- * mobile, locks background scroll while open, and is dismissible via the
- * close button, a backdrop tap, or Escape.
- */
 function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
   const [loading, setLoading] = useState(true);
   const [failed, setFailed] = useState(false);
@@ -133,11 +140,6 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // Some sites block being framed entirely (X-Frame-Options / CSP
-  // frame-ancestors). The iframe's onLoad still fires for a blocked frame
-  // in most browsers, so a timeout is the only reliable signal — if it's
-  // still "loading" after a few seconds, offer the new-tab fallback
-  // instead of leaving a spinner running forever.
   useEffect(() => {
     const timeout = setTimeout(() => {
       setLoading((current) => {
@@ -161,7 +163,7 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
         aria-label={`${work.title} live preview`}
         className="work-modal-panel"
       >
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-black/10 bg-white px-4 py-2.5 dark:border-white/10 dark:bg-off-black">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-[var(--border)] bg-[var(--background)] px-4 py-2.5">
           <p className="truncate text-sm font-medium">{work.title}</p>
           <div className="flex shrink-0 items-center gap-2">
             {work.liveUrl ? (
@@ -189,18 +191,18 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
 
         <div className="relative flex-1 overflow-hidden">
           {loading ? (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white dark:bg-off-black">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--background)]">
               <div className="text-center">
                 <Loader2 className="mx-auto mb-3 h-8 w-8 animate-spin text-accent" aria-hidden />
-                <p className="text-sm opacity-70">Loading preview…</p>
+                <p className="text-sm text-muted">Loading preview…</p>
               </div>
             </div>
           ) : null}
 
           {failed ? (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white p-8 text-center dark:bg-off-black">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--background)] p-8 text-center">
               <div>
-                <p className="text-sm opacity-70">
+                <p className="text-sm text-muted">
                   This preview is taking longer than expected — the site may
                   not allow embedding.
                 </p>
@@ -237,32 +239,22 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
 
 export function WorksSection() {
   const [previewWork, setPreviewWork] = useState<Work | null>(null);
-
   const closePreview = useCallback(() => setPreviewWork(null), []);
 
   return (
-    <section
-      id="works"
-      className="relative border-t border-black/10 dark:border-white/10 gradient-bg"
-    >
-      <div className="spatial-orb -right-10 top-1/3 h-72 w-72 opacity-10" aria-hidden />
+    <section id="works" className="border-t border-[var(--border)]">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <SectionHeading index="02" eyebrow="Portfolio" title="Selected Works" />
+        <SectionHeading index="02" eyebrow="Selected Work" title="Projects" />
 
-        {/* 1 column on mobile, 2 from md, 3 from lg. */}
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {works.map((work, index) =>
-            work.status === "coming-soon" ? (
-              <ComingSoonCard key={work.id} work={work} index={index} />
-            ) : (
-              <WorkCard
-                key={work.id}
-                work={work}
-                index={index}
-                onPreview={setPreviewWork}
-              />
-            )
-          )}
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+          {works.map((work, index) => (
+            <WorkCard
+              key={work.id}
+              work={work}
+              index={index}
+              onPreview={setPreviewWork}
+            />
+          ))}
         </div>
       </div>
 

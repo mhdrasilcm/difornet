@@ -65,59 +65,47 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
   }
 
   return (
-    <section
-      id="contact"
-      className="relative border-t border-black/10 dark:border-white/10 gradient-bg"
-    >
-      <div className="spatial-orb -left-16 bottom-0 h-72 w-72 opacity-10" aria-hidden />
+    <section id="contact" className="border-t border-[var(--border)]">
       <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
         <SectionHeading
           index="04"
           eyebrow="Get In Touch"
           title="Let's Talk"
         />
-        <div className="grid gap-8 lg:grid-cols-5 lg:items-start">
-          <div className="lg:col-span-2">
-            <div className="bento-tile bento-feature-glow p-8 group">
-              <h3 className="text-3xl font-bold tracking-tight lg:text-4xl">
-                Let&apos;s build{" "}
-                <span className="gradient-text">your next project.</span>
-              </h3>
-              <p className="mt-4 text-lg leading-relaxed opacity-70">
-                Tell me about your project or book a conversation. This is
-                the only form on the site.
-              </p>
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
+          <div className="studio-panel p-8 lg:col-span-5">
+            <h3 className="font-display text-3xl font-medium tracking-tight lg:text-4xl">
+              Have something in mind?{" "}
+              <em className="italic text-accent">Let&apos;s scope it.</em>
+            </h3>
+            <p className="mt-4 text-base leading-relaxed text-muted">
+              Share a rough idea, a timeline, or a link to an existing site that
+              needs an overhaul.
+            </p>
 
-              <div className="mt-8 flex flex-col gap-4">
-                <div className="stat-tile flex-1 hover:scale-[1.02] transition-transform duration-300 ease-out">
-                  <p className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest opacity-60">
-                    <span
-                      className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse"
-                      aria-hidden
-                    />
-                    Status
-                  </p>
-                  <p className="mt-2 font-semibold tracking-tight gradient-text">
-                    Currently accepting new projects
-                  </p>
-                </div>
-                <div className="stat-tile flex-1 hover:scale-[1.02] transition-transform duration-300 ease-out">
-                  <p className="font-mono text-xs uppercase tracking-widest opacity-60">
-                    Response Time
-                  </p>
-                  <p className="mt-2 font-semibold tracking-tight gradient-text">
-                    Within 2 business days
-                  </p>
-                </div>
+            <dl className="mt-8 space-y-4 border-t border-[var(--border)] pt-6 text-sm">
+              <div className="flex items-center justify-between gap-4">
+                <dt className="font-mono text-xs uppercase tracking-wider text-muted">
+                  Availability
+                </dt>
+                <dd className="font-medium text-[var(--stripe-green)]">
+                  Accepting new projects
+                </dd>
               </div>
-            </div>
+              <div className="flex items-center justify-between gap-4">
+                <dt className="font-mono text-xs uppercase tracking-wider text-muted">
+                  Response
+                </dt>
+                <dd className="font-medium">Within 2 business days</dd>
+              </div>
+            </dl>
           </div>
 
           <form
             action="https://api.web3forms.com/submit"
             method="POST"
             onSubmit={handleContactSubmit}
-            className="bento-tile space-y-5 p-8 lg:col-span-3 group"
+            className="studio-card space-y-4 p-8 lg:col-span-7"
           >
             <input
               type="hidden"
@@ -138,10 +126,7 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
             />
 
             <div>
-              <label
-                htmlFor="name"
-                className="mb-2 block text-sm font-medium"
-              >
+              <label htmlFor="name" className="mb-2 block text-sm font-medium">
                 Name
               </label>
               <input
@@ -164,10 +149,7 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
             </div>
 
             <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium"
-              >
+              <label htmlFor="email" className="mb-2 block text-sm font-medium">
                 Email
               </label>
               <input
@@ -202,19 +184,19 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
                 required
                 rows={5}
                 aria-invalid={fieldErrors.message ? "true" : undefined}
-                aria-describedby={
-                  fieldErrors.message ? "message-error" : undefined
-                }
+                aria-describedby="message-error"
                 className="input-field resize-none"
               />
-              {fieldErrors.message ? (
-                <p id="message-error" className="field-error">
-                  {fieldErrors.message}
-                </p>
-              ) : null}
+              <p
+                id="message-error"
+                className="field-error"
+                data-visible={fieldErrors.message ? "true" : "false"}
+              >
+                {fieldErrors.message}
+              </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 pt-1">
               <button
                 type="submit"
                 disabled={formStatus === "loading"}
@@ -225,13 +207,12 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
 
               <p aria-live="polite" className="text-sm">
                 {formStatus === "success" ? (
-                  <span className="text-accent">
-                    Thanks — your message is in. I&apos;ll reply within 2
-                    business days.
+                  <span className="text-[var(--stripe-green)]">
+                    Thanks — your message is in.
                   </span>
                 ) : null}
                 {formStatus === "error" ? (
-                  <span className="opacity-70">
+                  <span className="text-muted">
                     {Object.keys(fieldErrors).length > 0
                       ? "Please fix the highlighted fields above."
                       : "Something went wrong. Please try again in a moment."}

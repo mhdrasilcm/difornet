@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 
@@ -13,67 +13,61 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Set NEXT_PUBLIC_SITE_URL in your environment once the domain is live —
-// used for canonical/OG URLs, robots.txt, and the sitemap.
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
+  subsets: ["latin"],
+  style: ["normal", "italic"],
+});
+
 const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev";
-// Strip any markdown link artifacts if present
-const cleanUrl = rawUrl.replace(/\[|\]|\(.*\)/g, "").trim() || "https://difornet.pages.dev";
+const cleanUrl =
+  rawUrl.replace(/\[|\]|\(.*\)/g, "").trim() || "https://difornet.pages.dev";
 const siteUrl = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "DiforNet — Web, Mobile & Cloud Software Studio",
+    default: "DiforNet — Independent Web & App Studio in Kerala",
     template: "%s | DiforNet",
   },
   description:
-    "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+    "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, Android apps, and clean backend systems.",
   keywords: [
     "DiforNet",
     "web development Kerala",
     "Android app development Palakkad",
     "full-stack developer India",
     "freelance developer Kerala",
-    "cloud & API development studio",
   ],
   authors: [{ name: "DiforNet" }],
   creator: "DiforNet",
-  alternates: {
-    canonical: "/",
-  },
+  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "en_IN",
     url: siteUrl,
     siteName: "DiforNet",
-    title: "DiforNet — Web, Mobile & Cloud Software Studio",
+    title: "DiforNet — Independent Web & App Studio in Kerala",
     description:
-      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+      "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, Android apps, and clean backend systems.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "DiforNet — Web, Mobile & Cloud Software Studio",
+        alt: "DiforNet — Independent Web & App Studio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "DiforNet — Web, Mobile & Cloud Software Studio",
+    title: "DiforNet — Independent Web & App Studio in Kerala",
     description:
-      "A one-person studio in Palakkad, Kerala building full-stack web apps, Android apps, custom APIs, and cloud infrastructure.",
+      "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, and Android apps.",
     images: ["/opengraph-image"],
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  formatDetection: {
-    telephone: false,
-  },
-  // Google Search Console HTML-tag verification. Set
-  // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION to the "content" value it gives you.
+  robots: { index: true, follow: true },
+  formatDetection: { telephone: false },
   verification: {
     google: "sFph9IuGIu6YvB8BN0p455LYOtRbaHjpLCaqExiKRrg",
   },
@@ -82,14 +76,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  // Lets the page draw under the iOS status bar / home-indicator safe
-  // areas so `env(safe-area-inset-*)` resolves to real values instead of
-  // 0 — required for the sticky mobile CTA and cookie banner to clear the
-  // home-indicator gesture area cleanly.
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#111111" },
+    { media: "(prefers-color-scheme: light)", color: "#fbf7f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#13110f" },
   ],
 };
 
@@ -104,7 +94,7 @@ const jsonLd = {
     "https://instagram.com/difornet",
   ],
   description:
-    "One-person web, mobile, Android, API, and cloud infrastructure development studio based in Palakkad, Kerala, India.",
+    "Independent web, mobile, Android, and cloud development studio based in Palakkad, Kerala, India.",
   url: siteUrl,
   address: {
     "@type": "PostalAddress",
@@ -113,10 +103,7 @@ const jsonLd = {
     addressCountry: "IN",
   },
   areaServed: "IN",
-  founder: {
-    "@type": "Person",
-    name: "DiforNet",
-  },
+  founder: { "@type": "Person", name: "DiforNet" },
   foundingDate: "2026",
 };
 
@@ -132,7 +119,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
     >
       <head>
         <script

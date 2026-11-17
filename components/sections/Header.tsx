@@ -28,11 +28,6 @@ export function Header({
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
-  // Robust scroll lock: plain `overflow: hidden` on the body doesn't stop
-  // touch scrolling on iOS Safari and can cause the page to visibly jump
-  // if the scrollbar disappears. Pinning the body to `position: fixed` at
-  // its current scroll offset blocks scroll on every platform and we
-  // restore the exact position on close, so there's no jump either way.
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -47,8 +42,6 @@ export function Header({
     };
   }, [menuOpen]);
 
-  // Close on Escape and return focus to the toggle button so keyboard/
-  // screen-reader users aren't left inside a menu that's no longer there.
   useEffect(() => {
     if (!menuOpen) return;
 
@@ -64,60 +57,52 @@ export function Header({
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/10 bg-white dark:border-white/10 dark:bg-off-black">
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
       {/* Scroll Progress Bar */}
-      <div className="fixed left-0 top-0 z-[60] h-[2px] w-full bg-black/5 dark:bg-white/5">
+      <div className="fixed left-0 top-0 z-[60] h-[2px] w-full bg-transparent">
         <div
-          className="h-full bg-accent transition-[width] duration-150 ease-out"
+          className="h-full bg-[var(--accent)] transition-[width] duration-150 ease-out"
           style={{ width: `${scrollProgress}%` }}
         />
       </div>
 
       <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
-        {/* Logo */}
-        <a href="#top" className="shrink-0">
+        <a href="#top" className="flex shrink-0 items-center gap-2.5">
           {mounted ? (
             <Image
               src="/logo-icon.png"
               alt="DiforNet"
-              width={36}
-              height={36}
+              width={32}
+              height={32}
               priority
-              className="h-9 w-9"
+              className="h-8 w-8 rounded-md object-contain"
             />
-          ) : (
-            <span className="text-lg font-semibold tracking-tight">
-              DiforNet
-            </span>
-          )}
+          ) : null}
+          <span className="font-display text-xl font-semibold tracking-tight">
+            DiforNet
+          </span>
         </a>
 
-        {/* Desktop Navigation */}
-        <nav className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <a
               key={link.href}
               href={link.href}
               aria-current={activeSection === link.id ? "true" : undefined}
-              className={`group relative text-sm font-medium transition-opacity hover:opacity-100 ${
+              className={`relative text-sm font-medium transition-colors ${
                 activeSection === link.id
-                  ? "text-accent opacity-100"
-                  : "opacity-70"
+                  ? "text-accent"
+                  : "text-muted hover:text-[var(--foreground)]"
               }`}
             >
               {link.label}
-              <span
-                className={`absolute -bottom-1 left-0 h-px bg-accent transition-all duration-200 ${
-                  activeSection === link.id
-                    ? "w-full"
-                    : "w-0 group-hover:w-full"
-                }`}
-              />
+              {activeSection === link.id ? (
+                <span className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-[var(--accent)]" />
+              ) : null}
             </a>
           ))}
         </nav>
 
-        {/* Actions */}
         <div className="flex shrink-0 items-center gap-3">
           <button
             type="button"
@@ -140,17 +125,13 @@ export function Header({
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
-            className="btn-icon menu-toggle h-11 w-11"
+            className="btn-icon menu-toggle h-11 w-11 md:hidden"
           >
             {menuOpen ? <CloseIcon /> : <MenuIcon />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Menu — absolutely positioned so it overlays the page
-          instead of pushing content down (no layout jump), and sits in
-          its own stacking context above everything except the scroll
-          progress bar. */}
       {menuOpen ? (
         <>
           <button
@@ -158,13 +139,13 @@ export function Header({
             aria-label="Close menu"
             tabIndex={-1}
             onClick={closeMenu}
-            className="fixed inset-x-0 bottom-0 top-16 z-40 bg-black/20 backdrop-blur-[1px] md:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 bg-black/25 backdrop-blur-[1px] md:hidden"
           />
           <nav
             id="mobile-menu"
-            className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-black/10 bg-white px-6 py-4 shadow-lg dark:border-white/10 dark:bg-off-black md:hidden"
+            className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-4rem)] overflow-y-auto border-t border-[var(--border)] bg-[var(--background)] px-6 py-4 shadow-lg md:hidden"
           >
-            <ul className="flex flex-col divide-y divide-black/10 dark:divide-white/10">
+            <ul className="flex flex-col divide-y divide-[var(--border)]">
               {navLinks.map((link) => (
                 <li key={link.href}>
                   <a
