@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { SunIcon, MoonIcon, MenuIcon, CloseIcon } from "./Icons";
 import { NavLink } from "@/types";
@@ -19,7 +18,6 @@ export function Header({
   activeSection,
   scrollProgress,
   theme,
-  mounted,
   onToggleTheme,
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -57,8 +55,7 @@ export function Header({
   }, [menuOpen]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/90 backdrop-blur-md">
-      {/* Scroll Progress Bar */}
+    <header className="sticky top-0 z-50 border-b border-[var(--border)] bg-[var(--background)]/92 backdrop-blur-md">
       <div className="fixed left-0 top-0 z-[60] h-[2px] w-full bg-transparent">
         <div
           className="h-full bg-[var(--accent)] transition-[width] duration-150 ease-out"
@@ -66,58 +63,65 @@ export function Header({
         />
       </div>
 
-      <div className="relative mx-auto flex max-w-6xl items-center justify-between px-6 py-4 lg:px-8">
-        <a href="#top" className="flex shrink-0 items-center gap-2.5">
-          {mounted ? (
-            <Image
-              src="/logo-icon.png"
-              alt="DiforNet"
-              width={32}
-              height={32}
-              priority
-              className="h-8 w-8 rounded-md object-contain"
-            />
-          ) : null}
-          <span className="font-display text-xl font-semibold tracking-tight">
-            DiforNet
-          </span>
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-4 md:grid md:grid-cols-[1fr_auto_1fr] lg:px-8">
+        <a
+          href="#top"
+          className="inline-flex shrink-0 items-baseline gap-2.5 md:justify-self-start"
+        >
+          <svg
+            viewBox="0 0 100 84"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-[0.82em] w-auto shrink-0"
+            aria-hidden
+          >
+            <polygon points="24,0 44,0 20,84 0,84" fill="var(--stripe-green)" />
+            <polygon points="52,0 72,0 48,84 28,84" fill="var(--stripe-gold)" />
+            <polygon points="80,0 100,0 76,84 56,84" fill="var(--stripe-red)" />
+          </svg>
+          <span className="font-brand text-lg tracking-wide">DiforNet</span>
         </a>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              aria-current={activeSection === link.id ? "true" : undefined}
-              className={`relative text-sm font-medium transition-colors ${
-                activeSection === link.id
-                  ? "text-accent"
-                  : "text-muted hover:text-[var(--foreground)]"
-              }`}
-            >
-              {link.label}
-              {activeSection === link.id ? (
-                <span className="absolute -bottom-1 left-0 h-[2px] w-full rounded-full bg-[var(--accent)]" />
-              ) : null}
-            </a>
-          ))}
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+          {navLinks.map((link) => {
+            const isActive = activeSection === link.id;
+            return (
+              <a
+                key={link.href}
+                href={link.href}
+                aria-current={isActive ? "true" : undefined}
+                className={`relative py-1 text-sm font-medium transition-colors ${
+                  isActive
+                    ? "text-[var(--foreground)]"
+                    : "text-muted hover:text-[var(--foreground)]"
+                }`}
+              >
+                {link.label}
+                {isActive ? (
+                  <span className="absolute inset-x-0 -bottom-0.5 h-[2px] rounded-full bg-[var(--accent)]" />
+                ) : null}
+              </a>
+            );
+          })}
         </nav>
 
-        <div className="flex shrink-0 items-center gap-3">
+        <div className="flex shrink-0 items-center gap-3 md:justify-self-end">
           <button
             type="button"
             onClick={onToggleTheme}
             aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-            className="btn-icon h-11 w-11"
+            className="btn-icon h-10 w-10 min-h-10 min-w-10"
           >
             {theme === "light" ? <MoonIcon /> : <SunIcon />}
           </button>
+
           <a
             href="#contact"
-            className="btn-primary hidden px-5 py-2.5 text-sm md:inline-flex"
+            className="btn-primary hidden px-5 py-2 text-sm md:inline-flex"
           >
             Start a Project
           </a>
+
           <button
             ref={toggleButtonRef}
             type="button"
