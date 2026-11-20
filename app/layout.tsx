@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Geist, Geist_Mono } from "next/font/google";
+import { Space_Grotesk, Geist, Geist_Mono } from "next/font/google";
 import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 
@@ -13,10 +13,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
-  style: ["normal", "italic"],
+  weight: ["500", "600", "700"],
 });
 
 const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev";
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     template: "%s | DiforNet",
   },
   description:
-    "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, Android apps, and clean backend systems.",
+    "An independent software studio in Palakkad, Kerala building fast websites, web apps, Android apps, and clean backend systems.",
   keywords: [
     "DiforNet",
     "web development Kerala",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     siteName: "DiforNet",
     title: "DiforNet — Independent Web & App Studio in Kerala",
     description:
-      "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, Android apps, and clean backend systems.",
+      "An independent software studio in Palakkad, Kerala building fast websites, web apps, Android apps, and clean backend systems.",
     images: [
       {
         url: "/opengraph-image",
@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "DiforNet — Independent Web & App Studio in Kerala",
     description:
-      "An independent software studio in Palakkad, Kerala crafting fast websites, web apps, and Android apps.",
+      "An independent software studio in Palakkad, Kerala building fast websites, web apps, and Android apps.",
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
@@ -78,8 +78,8 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#fbf7f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#13110f" },
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
   ],
 };
 
@@ -119,17 +119,15 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <head>
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <script
           type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>

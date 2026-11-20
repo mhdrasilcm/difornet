@@ -11,45 +11,51 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
-  --color-white: #fcfbf9;
-  --color-off-black: #121110;
-  --color-terracotta: #c84b31;
-  --color-forest: #1f6e43;
+  --color-white: #ffffff;
+  --color-off-black: #0b0b0d;
+  --color-terracotta: #d13b27;
+  --color-forest: #178048;
   --color-saffron: #d99b26;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-fraunces);
+  --font-display: var(--font-space-grotesk);
 }
 
 :root {
   color-scheme: light;
-  --background: #fcfbf9;
-  --surface: #f4f1eb;
+  --background: #ffffff;
+  --surface: #f5f5f7;
   --surface-elevated: #ffffff;
-  --foreground: #141210;
-  --muted: #625b53;
-  --border: rgba(20, 18, 16, 0.1);
-  --accent: #c84b31;
+  --foreground: #0b0b0d;
+  --muted: #5a5a63;
+  --border: rgba(11, 11, 13, 0.1);
+  --accent: #d13b27;
   --on-accent: #ffffff;
-  --stripe-green: #1f6e43;
-  --stripe-gold: #d99b26;
-  --stripe-red: #c84b31;
+  --stripe-green: #178048;
+  --stripe-gold: #e09f1f;
+  --stripe-red: #d13b27;
+  --card-shadow:
+    0 1px 2px rgba(11, 11, 13, 0.04),
+    0 12px 32px -8px rgba(11, 11, 13, 0.07);
   --mobile-cta-h: 4.5rem;
 }
 
 :root.dark {
   color-scheme: dark;
-  --background: #121110;
-  --surface: #1a1816;
-  --surface-elevated: #201d1a;
-  --foreground: #f4efe6;
-  --muted: #a3998d;
-  --border: rgba(244, 239, 230, 0.11);
-  --accent: #e06d53;
-  --on-accent: #121110;
-  --stripe-green: #34a867;
-  --stripe-gold: #eab338;
-  --stripe-red: #e06d53;
+  --background: #0b0b0d;
+  --surface: #131316;
+  --surface-elevated: #18181c;
+  --foreground: #f6f6f8;
+  --muted: #9898a3;
+  --border: rgba(255, 255, 255, 0.1);
+  --accent: #ef533d;
+  --on-accent: #0b0b0d;
+  --stripe-green: #2cb66c;
+  --stripe-gold: #f0b429;
+  --stripe-red: #ef533d;
+  --card-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.35),
+    0 16px 36px -8px rgba(0, 0, 0, 0.55);
 }
 
 html {
@@ -75,8 +81,12 @@ body[data-scroll-locked="true"] {
 
 @layer components {
   .font-display {
-    font-family: var(--font-serif), Georgia, serif;
-    font-variation-settings: "SOFT" 40, "WONK" 0;
+    font-family: var(--font-space-grotesk), var(--font-sans), sans-serif;
+  }
+
+  .font-brand {
+    font-family: "Galactic Vanguardian NCV", var(--font-sans), sans-serif;
+    line-height: 1;
   }
 
   .text-accent {
@@ -110,24 +120,41 @@ body[data-scroll-locked="true"] {
     background-color: var(--stripe-red);
   }
 
-  .paper-grain {
-    background-image: radial-gradient(
-      color-mix(in srgb, var(--foreground) 5%, transparent) 1px,
-      transparent 1px
+  .engineer-grid {
+    background-image:
+      linear-gradient(
+        to right,
+        color-mix(in srgb, var(--foreground) 4.5%, transparent) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--foreground) 4.5%, transparent) 1px,
+        transparent 1px
+      );
+    background-size: 48px 48px;
+    -webkit-mask-image: radial-gradient(
+      ellipse 80% 70% at 50% 25%,
+      black 35%,
+      transparent 100%
     );
-    background-size: 24px 24px;
+    mask-image: radial-gradient(
+      ellipse 80% 70% at 50% 25%,
+      black 35%,
+      transparent 100%
+    );
   }
 
   .studio-card {
-    border-radius: 1.25rem;
+    border-radius: 1rem;
     border: 1px solid var(--border);
     background-color: var(--surface-elevated);
-    transition: border-color 0.25s ease, transform 0.25s ease,
-      background-color 0.25s ease;
+    box-shadow: var(--card-shadow);
+    transition: border-color 0.2s ease, transform 0.2s ease;
   }
 
   .studio-panel {
-    border-radius: 1.25rem;
+    border-radius: 1rem;
     border: 1px solid var(--border);
     background-color: var(--surface);
   }
@@ -159,12 +186,12 @@ body[data-scroll-locked="true"] {
     gap: 0.5rem;
     border-radius: 9999px;
     border: 1px solid var(--border);
-    background-color: transparent;
+    background-color: var(--surface-elevated);
     color: var(--foreground);
     font-weight: 600;
     min-height: 2.75rem;
-    transition: border-color 0.2s ease, color 0.2s ease,
-      background-color 0.2s ease, transform 0.2s ease;
+    transition: border-color 0.2s ease, background-color 0.2s ease,
+      transform 0.2s ease;
   }
 
   .btn-secondary:active {
@@ -208,7 +235,7 @@ body[data-scroll-locked="true"] {
     }
 
     .studio-card-hover:hover {
-      border-color: color-mix(in srgb, var(--foreground) 26%, transparent);
+      border-color: color-mix(in srgb, var(--foreground) 25%, transparent);
       transform: translateY(-2px);
     }
   }
@@ -267,11 +294,11 @@ body[data-scroll-locked="true"] {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    border-radius: 9999px;
-    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    padding: 0.25rem 0.65rem;
     font-family: var(--font-mono), monospace;
     font-size: 0.7rem;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
     background-color: var(--surface);
     color: var(--foreground);
     border: 1px solid var(--border);
@@ -322,72 +349,6 @@ body[data-scroll-locked="true"] {
     background-color: var(--border);
   }
 
-  /* ---------- Work Preview Modal ---------- */
-
-  .work-modal-backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 80;
-    background: rgba(18, 17, 16, 0.72);
-    backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0;
-  }
-
-  @media (min-width: 640px) {
-    .work-modal-backdrop {
-      padding: 1.5rem;
-    }
-  }
-
-  .work-modal-panel {
-    position: relative;
-    background-color: var(--background);
-    border: 1px solid var(--border);
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  @media (min-width: 640px) {
-    .work-modal-panel {
-      width: min(100%, 72rem);
-      height: min(100%, 42rem);
-      border-radius: 1.25rem;
-    }
-  }
-
-  /* ---------- Cookie Banner & Mobile CTA ---------- */
-
-  .cookie-banner {
-    background-color: var(--surface-elevated);
-    border-top: 1px solid var(--border);
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-  }
-
-  .mobile-cta-bar {
-    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
-  }
-
-  .skeleton-block {
-    border-radius: 0.9rem;
-    background-color: var(--surface);
-    border: 1px solid var(--border);
-  }
-
-
-.font-brand {
-    font-family: "Galactic Vanguardian NCV", var(--font-sans), sans-serif;
-    line-height: 1;
-  }
-
   /* ---------- Oversized Footer Lockup ---------- */
 
   .footer-brand-stage {
@@ -424,7 +385,7 @@ body[data-scroll-locked="true"] {
     letter-spacing: 0.02em;
     line-height: 0.8;
     font-size: 1em;
-    color: #141210;
+    color: #0b0b0d;
     transition: opacity 0.25s ease;
   }
 
@@ -436,5 +397,79 @@ body[data-scroll-locked="true"] {
     .footer-brand-lockup:hover .footer-brand-wordmark {
       opacity: 0.85;
     }
+  }
+
+  /* ---------- Work Preview Modal ---------- */
+
+  .work-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 80;
+    background: rgba(11, 11, 13, 0.72);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  @media (min-width: 640px) {
+    .work-modal-backdrop {
+      padding: 1.5rem;
+    }
+  }
+
+  .work-modal-panel {
+    position: relative;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  @media (min-width: 640px) {
+    .work-modal-panel {
+      width: min(100%, 72rem);
+      height: min(100%, 42rem);
+      border-radius: 1rem;
+    }
+  }
+
+  /* ---------- Cookie Banner & Mobile CTA ---------- */
+
+  .cookie-banner {
+    background-color: var(--surface-elevated);
+    border-top: 1px solid var(--border);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .mobile-cta-bar {
+    padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .skeleton-block {
+    border-radius: 0.9rem;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+  }
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

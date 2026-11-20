@@ -13,7 +13,7 @@ export function SectionHeading({ index, eyebrow, title }: SectionHeadingProps) {
         </span>
         <span className="section-rule" aria-hidden />
       </div>
-      <h2 className="font-display text-4xl font-medium tracking-tight lg:text-5xl">
+      <h2 className="font-display text-3xl font-bold tracking-[-0.03em] sm:text-4xl lg:text-5xl">
         {title}
       </h2>
     </div>

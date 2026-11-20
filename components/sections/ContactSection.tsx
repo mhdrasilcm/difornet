@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SectionHeading } from "./SectionHeading";
 import { FieldErrors, FormStatus } from "@/types";
 
@@ -9,6 +10,7 @@ interface ContactSectionProps {
 }
 
 export function ContactSection({ siteUrl }: ContactSectionProps) {
+  const router = useRouter();
   const [formStatus, setFormStatus] = useState<FormStatus>("idle");
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
 
@@ -55,7 +57,7 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
         setFormStatus("success");
         setFieldErrors({});
         form.reset();
-        window.location.href = "/thank-you";
+        router.push("/thank-you");
       } else {
         setFormStatus("error");
       }
@@ -74,9 +76,9 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
         />
         <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
           <div className="studio-panel p-8 lg:col-span-5">
-            <h3 className="font-display text-3xl font-medium tracking-tight lg:text-4xl">
+            <h3 className="font-display text-3xl font-bold tracking-tight lg:text-4xl">
               Have something in mind?{" "}
-              <em className="italic text-accent">Let&apos;s scope it.</em>
+              <span className="text-accent">Let&apos;s build it.</span>
             </h3>
             <p className="mt-4 text-base leading-relaxed text-muted">
               Share a rough idea, a timeline, or a link to an existing site that
