@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+
 export const dynamic = "force-static";
 export const size = { width: 180, height: 180 };
 export const contentType = "image/png";
@@ -14,33 +15,12 @@ export default function AppleIcon() {
           alignItems: "center",
           justifyContent: "center",
           gap: 16,
-          background: "#fbf7f0",
+          background: "#100904",
         }}
       >
-        <div
-          style={{
-            width: 24,
-            height: 100,
-            background: "#1f6e43",
-            transform: "skewX(-20deg)",
-          }}
-        />
-        <div
-          style={{
-            width: 24,
-            height: 100,
-            background: "#d99b26",
-            transform: "skewX(-20deg)",
-          }}
-        />
-        <div
-          style={{
-            width: 24,
-            height: 100,
-            background: "#c84b31",
-            transform: "skewX(-20deg)",
-          }}
-        />
+        <div style={{ width: 24, height: 100, background: "#2f6e49", transform: "skewX(-20deg)" }} />
+        <div style={{ width: 24, height: 100, background: "#c98a2c", transform: "skewX(-20deg)" }} />
+        <div style={{ width: 24, height: 100, background: "#dc5000", transform: "skewX(-20deg)" }} />
       </div>
     ),
     { ...size }

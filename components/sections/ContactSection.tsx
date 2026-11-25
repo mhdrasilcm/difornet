@@ -2,8 +2,8 @@
 
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
-import { SectionHeading } from "./SectionHeading";
 import { FieldErrors, FormStatus } from "@/types";
+import { KineticLine } from "./KineticText";
 
 interface ContactSectionProps {
   siteUrl?: string;
@@ -67,163 +67,162 @@ export function ContactSection({ siteUrl }: ContactSectionProps) {
   }
 
   return (
-    <section id="contact" className="border-t border-[var(--border)]">
-      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <SectionHeading
-          index="04"
-          eyebrow="Get In Touch"
-          title="Let's Talk"
-        />
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-start">
-          <div className="studio-panel p-8 lg:col-span-5">
-            <h3 className="font-display text-3xl font-bold tracking-tight lg:text-4xl">
-              Have something in mind?{" "}
-              <span className="text-accent">Let&apos;s build it.</span>
-            </h3>
-            <p className="mt-4 text-base leading-relaxed text-muted">
-              Share a rough idea, a timeline, or a link to an existing site that
-              needs an overhaul.
-            </p>
+    <section
+      id="contact"
+      className="dashed-rule relative z-10 px-6 py-28 lg:px-10"
+    >
+      <div className="grid gap-12 lg:grid-cols-12 lg:items-start">
+        <div className="lg:col-span-5">
+          <span className="type-label text-[12px] text-[#dc5000]">
+            04 — DISPATCH · CONTACT
+          </span>
+          <h2 className="type-display mt-4 text-[41px] sm:text-[51px]">
+            <KineticLine>START A</KineticLine>
+            <KineticLine delay={0.08}>PROJECT.</KineticLine>
+          </h2>
+          <p className="type-prose mt-5 max-w-md text-[22px] sm:text-[26px]">
+            Share a rough idea, a timeline, or a link to an existing site.
+          </p>
 
-            <dl className="mt-8 space-y-4 border-t border-[var(--border)] pt-6 text-sm">
-              <div className="flex items-center justify-between gap-4">
-                <dt className="font-mono text-xs uppercase tracking-wider text-muted">
-                  Availability
-                </dt>
-                <dd className="font-medium text-[var(--stripe-green)]">
-                  Accepting new projects
-                </dd>
-              </div>
-              <div className="flex items-center justify-between gap-4">
-                <dt className="font-mono text-xs uppercase tracking-wider text-muted">
-                  Response
-                </dt>
-                <dd className="font-medium">Within 2 business days</dd>
-              </div>
-            </dl>
+          <dl className="dashed-rule mt-10 space-y-4 pt-6 text-[12px] font-medium uppercase tracking-[0.06em]">
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-[#6c5f51]">AVAILABILITY</dt>
+              <dd className="text-[#dc5000]">OPEN FOR PROJECTS</dd>
+            </div>
+            <div className="flex items-center justify-between gap-4">
+              <dt className="text-[#6c5f51]">RESPONSE</dt>
+              <dd>WITHIN 2 BUSINESS DAYS</dd>
+            </div>
+          </dl>
+        </div>
+
+        <form
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          onSubmit={handleContactSubmit}
+          className="darkroom-card space-y-6 p-6 sm:p-8 lg:col-span-7"
+        >
+          <input
+            type="hidden"
+            name="access_key"
+            value={process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? ""}
+          />
+          <input
+            type="hidden"
+            name="subject"
+            value="DiforNet — New contact / booking"
+          />
+          <input
+            type="hidden"
+            name="redirect"
+            value={`${siteUrl ?? "https://difornet.pages.dev"}/thank-you`}
+          />
+
+          <div>
+            <label
+              htmlFor="name"
+              className="type-label mb-1 block text-[11px] text-[#6c5f51]"
+            >
+              NAME
+            </label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              placeholder="Your name"
+              autoComplete="name"
+              aria-invalid={fieldErrors.name ? "true" : undefined}
+              aria-describedby="name-error"
+              className="input-underline"
+            />
+            <p
+              id="name-error"
+              className="field-error"
+              data-visible={fieldErrors.name ? "true" : "false"}
+            >
+              {fieldErrors.name}
+            </p>
           </div>
 
-          <form
-            action="https://api.web3forms.com/submit"
-            method="POST"
-            onSubmit={handleContactSubmit}
-            className="studio-card space-y-4 p-8 lg:col-span-7"
-          >
+          <div>
+            <label
+              htmlFor="email"
+              className="type-label mb-1 block text-[11px] text-[#6c5f51]"
+            >
+              EMAIL
+            </label>
             <input
-              type="hidden"
-              name="access_key"
-              value={process.env.NEXT_PUBLIC_WEB3FORMS_ACCESS_KEY ?? ""}
+              id="email"
+              name="email"
+              type="email"
+              required
+              placeholder="you@domain.com"
+              autoComplete="email"
+              aria-invalid={fieldErrors.email ? "true" : undefined}
+              aria-describedby="email-error"
+              className="input-underline"
             />
-            <input
-              type="hidden"
-              name="subject"
-              value="DiforNet — New contact / booking"
+            <p
+              id="email-error"
+              className="field-error"
+              data-visible={fieldErrors.email ? "true" : "false"}
+            >
+              {fieldErrors.email}
+            </p>
+          </div>
+
+          <div>
+            <label
+              htmlFor="message"
+              className="type-label mb-1 block text-[11px] text-[#6c5f51]"
+            >
+              MESSAGE
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              rows={4}
+              placeholder="What are we building?"
+              aria-invalid={fieldErrors.message ? "true" : undefined}
+              aria-describedby="message-error"
+              className="input-underline resize-none"
             />
-            <input
-              type="hidden"
-              name="redirect"
-              value={`${
-                siteUrl ?? "https://difornet.pages.dev"
-              }/thank-you`}
-            />
+            <p
+              id="message-error"
+              className="field-error"
+              data-visible={fieldErrors.message ? "true" : "false"}
+            >
+              {fieldErrors.message}
+            </p>
+          </div>
 
-            <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium">
-                Name
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                autoComplete="name"
-                aria-invalid={fieldErrors.name ? "true" : undefined}
-                aria-describedby="name-error"
-                className="input-field"
-              />
-              <p
-                id="name-error"
-                className="field-error"
-                data-visible={fieldErrors.name ? "true" : "false"}
-              >
-                {fieldErrors.name}
-              </p>
-            </div>
+          <div className="flex flex-wrap items-center gap-4 pt-2">
+            <button
+              type="submit"
+              disabled={formStatus === "loading"}
+              className="btn-pill-filled disabled:opacity-60"
+            >
+              {formStatus === "loading" ? "SENDING…" : "SEND MESSAGE"}
+            </button>
 
-            <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium">
-                Email
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                aria-invalid={fieldErrors.email ? "true" : undefined}
-                aria-describedby="email-error"
-                className="input-field"
-              />
-              <p
-                id="email-error"
-                className="field-error"
-                data-visible={fieldErrors.email ? "true" : "false"}
-              >
-                {fieldErrors.email}
-              </p>
-            </div>
-
-            <div>
-              <label
-                htmlFor="message"
-                className="mb-2 block text-sm font-medium"
-              >
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                rows={5}
-                aria-invalid={fieldErrors.message ? "true" : undefined}
-                aria-describedby="message-error"
-                className="input-field resize-none"
-              />
-              <p
-                id="message-error"
-                className="field-error"
-                data-visible={fieldErrors.message ? "true" : "false"}
-              >
-                {fieldErrors.message}
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-4 pt-1">
-              <button
-                type="submit"
-                disabled={formStatus === "loading"}
-                className="btn-primary px-7 py-3.5 text-sm disabled:opacity-60"
-              >
-                {formStatus === "loading" ? "Sending…" : "Send message"}
-              </button>
-
-              <p aria-live="polite" className="text-sm">
-                {formStatus === "success" ? (
-                  <span className="text-[var(--stripe-green)]">
-                    Thanks — your message is in.
-                  </span>
-                ) : null}
-                {formStatus === "error" ? (
-                  <span className="text-muted">
-                    {Object.keys(fieldErrors).length > 0
-                      ? "Please fix the highlighted fields above."
-                      : "Something went wrong. Please try again in a moment."}
-                  </span>
-                ) : null}
-              </p>
-            </div>
-          </form>
-        </div>
+            <p aria-live="polite" className="text-xs uppercase">
+              {formStatus === "success" ? (
+                <span className="text-[#ffedd7]">
+                  RECEIVED — REPLY WITHIN 2 BUSINESS DAYS.
+                </span>
+              ) : null}
+              {formStatus === "error" ? (
+                <span className="text-[#dc5000]">
+                  {Object.keys(fieldErrors).length > 0
+                    ? "FIX HIGHLIGHTED FIELDS ABOVE."
+                    : "SOMETHING WENT WRONG. TRY AGAIN."}
+                </span>
+              ) : null}
+            </p>
+          </div>
+        </form>
       </div>
     </section>
   );

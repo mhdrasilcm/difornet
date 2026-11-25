@@ -3,115 +3,10 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SectionHeading } from "./SectionHeading";
+import { ExternalLink, X, Play, Loader2 } from "lucide-react";
 import { works } from "@/lib/data";
 import { Work } from "@/types";
-import { ExternalLink, X, Play, Loader2 } from "lucide-react";
-
-function WorkCard({
-  work,
-  index,
-  onPreview,
-}: {
-  work: Work;
-  index: number;
-  onPreview: (work: Work) => void;
-}) {
-  return (
-    <motion.article
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, delay: index * 0.08 }}
-      viewport={{ once: true, margin: "-60px" }}
-      className="studio-card studio-card-hover flex flex-col overflow-hidden"
-    >
-      {/* Preview Frame */}
-      <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-[var(--border)] bg-[var(--surface)]">
-        {work.imageUrl ? (
-          <Image
-            src={work.imageUrl}
-            alt={`${work.title} preview`}
-            fill
-            className="object-cover object-top"
-          />
-        ) : (
-          <div className="paper-grain flex h-full flex-col justify-between p-6">
-            <div className="flex items-center justify-between">
-              <span className="font-mono text-xs uppercase tracking-widest text-muted">
-                {work.category}
-              </span>
-              <span className="font-mono text-xs text-muted">{work.year}</span>
-            </div>
-            <div>
-              <p className="font-display text-3xl italic tracking-tight opacity-85">
-                {work.title}
-              </p>
-              <div className="tri-stripe-bar mt-4 max-w-[96px]" aria-hidden>
-                <span />
-                <span />
-                <span />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Details */}
-      <div className="flex flex-1 flex-col justify-between p-6 sm:p-7">
-        <div>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="font-mono text-xs uppercase tracking-wider text-accent">
-              {work.category}
-            </span>
-            <span className="font-mono text-xs text-muted">{work.year}</span>
-          </div>
-
-          <h3 className="font-display mt-2 text-2xl font-medium tracking-tight">
-            {work.title}
-          </h3>
-          <p className="mt-2.5 text-sm leading-relaxed text-muted">
-            {work.description}
-          </p>
-          <p className="mt-3 text-sm leading-relaxed opacity-90">
-            {work.outcome}
-          </p>
-        </div>
-
-        <div className="mt-6 pt-5 border-t border-[var(--border)]">
-          <div className="flex flex-wrap gap-2">
-            {work.tags.map((tag) => (
-              <span key={tag} className="tag-pill">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          {work.liveUrl ? (
-            <div className="mt-5 flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => onPreview(work)}
-                className="btn-primary flex-1 px-5 py-2.5 text-sm"
-              >
-                <Play className="h-4 w-4" aria-hidden />
-                Interactive Preview
-              </button>
-              <a
-                href={work.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`Open ${work.title} in a new tab`}
-                className="btn-icon h-11 w-11 shrink-0"
-              >
-                <ExternalLink className="h-4 w-4" aria-hidden />
-              </a>
-            </div>
-          ) : null}
-        </div>
-      </div>
-    </motion.article>
-  );
-}
+import { KineticLine } from "./KineticText";
 
 function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
   const [loading, setLoading] = useState(true);
@@ -163,15 +58,15 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
         aria-label={`${work.title} live preview`}
         className="work-modal-panel"
       >
-        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-[var(--border)] bg-[var(--background)] px-4 py-2.5">
-          <p className="truncate text-sm font-medium">{work.title}</p>
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-dashed border-[#40372e] bg-[#100904] px-5 py-3">
+          <p className="type-label truncate text-[12px]">{work.title}</p>
           <div className="flex shrink-0 items-center gap-2">
             {work.liveUrl ? (
               <a
                 href={work.liveUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-icon h-11 w-11"
+                className="btn-ghost-muted h-11 w-11 px-0"
                 aria-label="Open in new tab"
               >
                 <ExternalLink className="h-4 w-4" aria-hidden />
@@ -182,7 +77,7 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
               type="button"
               onClick={onClose}
               aria-label="Close preview"
-              className="btn-icon h-11 w-11"
+              className="btn-ghost-muted h-11 w-11 px-0"
             >
               <X className="h-4 w-4" aria-hidden />
             </button>
@@ -191,30 +86,32 @@ function PreviewModal({ work, onClose }: { work: Work; onClose: () => void }) {
 
         <div className="relative flex-1 overflow-hidden">
           {loading ? (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--background)]">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#100904]">
               <div className="text-center">
-                <Loader2 className="mx-auto mb-3 h-8 w-8 animate-spin text-accent" aria-hidden />
-                <p className="text-sm text-muted">Loading preview…</p>
+                <Loader2
+                  className="mx-auto mb-3 h-7 w-7 animate-spin text-[#dc5000]"
+                  aria-hidden
+                />
+                <p className="type-label text-[11px]">LOADING PREVIEW…</p>
               </div>
             </div>
           ) : null}
 
           {failed ? (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[var(--background)] p-8 text-center">
+            <div className="absolute inset-0 z-10 flex items-center justify-center bg-[#100904] p-8 text-center">
               <div>
-                <p className="text-sm text-muted">
-                  This preview is taking longer than expected — the site may
-                  not allow embedding.
+                <p className="text-sm text-[#ffedd7]/80">
+                  Preview timed out — this site may block embedding.
                 </p>
                 {work.liveUrl ? (
                   <a
                     href={work.liveUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="btn-secondary mt-4 inline-flex px-5 py-2.5 text-sm"
+                    className="btn-ghost-outline mt-5"
                   >
                     Open in new tab
-                    <ExternalLink className="h-4 w-4" aria-hidden />
+                    <ExternalLink className="h-3.5 w-3.5" aria-hidden />
                   </a>
                 ) : null}
               </div>
@@ -242,20 +139,106 @@ export function WorksSection() {
   const closePreview = useCallback(() => setPreviewWork(null), []);
 
   return (
-    <section id="works" className="border-t border-[var(--border)]">
-      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <SectionHeading index="02" eyebrow="Selected Work" title="Projects" />
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-          {works.map((work, index) => (
-            <WorkCard
-              key={work.id}
-              work={work}
-              index={index}
-              onPreview={setPreviewWork}
-            />
-          ))}
+    <section
+      id="works"
+      className="dashed-rule relative z-10 px-6 py-28 lg:px-10"
+    >
+      <div className="mb-14 flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <span className="type-label text-[12px] text-[#dc5000]">
+            02 — ARTIFACTS · SHIPPED WORK
+          </span>
+          <h2 className="type-display mt-4 text-[41px] sm:text-[51px]">
+            <KineticLine>SELECTED</KineticLine>
+            <KineticLine delay={0.08}>PROJECTS.</KineticLine>
+          </h2>
         </div>
+
+        <p className="type-prose max-w-md text-[20px] sm:text-[24px]">
+          Real sites shipped for real clients — built without templates.
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 gap-[18px] md:grid-cols-2">
+        {works.map((work, index) => (
+          <motion.article
+            key={work.id}
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.45, delay: index * 0.08 }}
+            className="darkroom-card flex flex-col overflow-hidden"
+          >
+            <div className="relative aspect-[16/10] w-full overflow-hidden border-b border-dashed border-[#40372e]">
+              {work.imageUrl ? (
+                <Image
+                  src={work.imageUrl}
+                  alt={`${work.title} preview`}
+                  fill
+                  className="object-cover object-top"
+                />
+              ) : (
+                <div className="flex h-full flex-col justify-between bg-[#100904]/85 p-6">
+                  <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.08em]">
+                    <span className="text-[#dc5000]">{work.category}</span>
+                    <span className="text-[#6c5f51]">ISSUE · {work.year}</span>
+                  </div>
+                  <div>
+                    <p className="type-display text-[32px] sm:text-[38px]">
+                      {work.title}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex flex-1 flex-col justify-between p-6">
+              <div>
+                <p className="type-prose text-[20px] sm:text-[22px]">
+                  {work.description}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-[#ffedd7]/75">
+                  {work.outcome}
+                </p>
+              </div>
+
+              <div className="dashed-rule mt-6 pt-5">
+                <div className="flex flex-wrap gap-2">
+                  {work.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-[22.5px] border border-[#40372e] px-3 py-1 text-[11px] font-medium uppercase"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {work.liveUrl ? (
+                  <div className="mt-5 flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setPreviewWork(work)}
+                      className="btn-pill-filled"
+                    >
+                      <Play className="h-3.5 w-3.5 fill-current" aria-hidden />
+                      Interactive Preview
+                    </button>
+                    <a
+                      href={work.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-ghost-muted"
+                    >
+                      Visit
+                      <ExternalLink className="h-3.5 w-3.5" aria-hidden />
+                    </a>
+                  </div>
+                ) : null}
+              </div>
+            </div>
+          </motion.article>
+        ))}
       </div>
 
       <AnimatePresence>

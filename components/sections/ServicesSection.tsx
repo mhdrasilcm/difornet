@@ -1,73 +1,110 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Layout, Code2, Smartphone, Server } from "lucide-react";
-import { SectionHeading } from "./SectionHeading";
-import { ArrowIcon } from "./Icons";
+import { motion, AnimatePresence } from "framer-motion";
 import { services } from "@/lib/data";
 
-const serviceIcons = [Layout, Code2, Smartphone, Server];
+interface ServicesSectionProps {
+  activeIndex: number;
+  onSelectIndex: (index: number) => void;
+}
 
-export function ServicesSection() {
+export function ServicesSection({
+  activeIndex,
+  onSelectIndex,
+}: ServicesSectionProps) {
+  const current = services[activeIndex] ?? services[0];
+
   return (
     <section
       id="services"
-      className="border-t border-[var(--border)] bg-[var(--surface)]/60"
+      className="dashed-rule relative z-10 flex min-h-[100dvh] flex-col justify-between px-6 py-24 lg:px-10"
     >
-      <div className="mx-auto max-w-6xl px-6 py-24 lg:px-8">
-        <SectionHeading index="01" eyebrow="Capabilities" title="What I Build" />
+      {/* Top Bar + Interactive Discipline Switcher */}
+      <div className="flex flex-wrap items-center justify-between gap-4">
+        <span className="type-label text-[12px] text-[#dc5000]">
+          01 — VOID MODE · CAPABILITIES
+        </span>
 
-        <div className="grid grid-cols-1 gap-px overflow-hidden rounded-2xl border border-[var(--border)] bg-[var(--border)] md:grid-cols-2">
-          {services.map((service, index) => {
-            const Icon = serviceIcons[index] ?? Layout;
+        <div
+          role="tablist"
+          aria-label="Capabilities"
+          className="flex flex-wrap gap-2"
+        >
+          {services.map((service, idx) => {
+            const selected = idx === activeIndex;
             return (
-              <motion.article
+              <button
                 key={service.id}
-                initial={{ opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.35, delay: index * 0.05 }}
-                viewport={{ once: true, margin: "-60px" }}
-                className="group flex flex-col justify-between bg-[var(--surface-elevated)] p-7 sm:p-9"
+                type="button"
+                role="tab"
+                aria-selected={selected}
+                onClick={() => onSelectIndex(idx)}
+                className={selected ? "btn-ghost-outline" : "btn-ghost-muted"}
               >
-                <div>
-                  <div className="flex items-center justify-between">
-                    <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-[var(--border)] bg-[var(--surface)] text-[var(--foreground)] transition-colors group-hover:border-[var(--accent)] group-hover:text-accent">
-                      <Icon className="h-5 w-5" aria-hidden />
-                    </span>
-                    <span className="font-mono text-xs tracking-widest text-muted">
-                      {service.index}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display mt-6 text-2xl font-bold tracking-tight">
-                    {service.title}
-                  </h3>
-
-                  <p className="mt-3 text-sm leading-relaxed text-muted sm:text-base">
-                    {service.description}
-                  </p>
-                </div>
-
-                <div className="mt-7 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--border)] pt-5">
-                  <div className="flex flex-wrap gap-1.5">
-                    {service.deliverables.map((item) => (
-                      <span key={item} className="tag-pill">
-                        {item}
-                      </span>
-                    ))}
-                  </div>
-                  <a
-                    href="#contact"
-                    className="inline-flex min-h-10 items-center gap-1.5 text-sm font-medium text-accent"
-                  >
-                    Start
-                    <ArrowIcon className="h-4 w-4" />
-                  </a>
-                </div>
-              </motion.article>
+                {service.index} · {service.title.split(" ")[0]}
+              </button>
             );
           })}
         </div>
+      </div>
+
+      {/* 3-Column Flanking Void Reveal (Text / 3D Artifact / Text) */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={current.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="my-auto grid gap-[18px] py-16 lg:grid-cols-12 lg:items-center"
+        >
+          {/* Left 41px Uppercase Statement */}
+          <div className="lg:col-span-4">
+            <p className="type-label mb-3 text-[11px] text-[#dc5000]">
+              DISCIPLINE {current.index}
+            </p>
+            <h2 className="type-display text-[34px] sm:text-[41px]">
+              {current.title}
+            </h2>
+          </div>
+
+          {/* Center Breathing Room for the 3D Monolith */}
+          <div className="hidden h-72 lg:col-span-4 lg:block" aria-hidden />
+
+          {/* Right Mixed-Case 400 Conversational Voice */}
+          <div className="darkroom-card p-6 lg:col-span-4 lg:border-none lg:bg-transparent lg:p-0 lg:backdrop-blur-none">
+            <p className="type-prose text-[22px] sm:text-[26px] lg:text-[29px]">
+              {current.description}
+            </p>
+
+            <div className="dashed-rule my-6" />
+
+            <ul className="space-y-2.5">
+              {current.deliverables.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center justify-between text-[12px] font-medium uppercase tracking-[0.06em]"
+                >
+                  <span className="text-[#6c5f51]">INCLUDED</span>
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Bottom Micro Legal / Spec Line */}
+      <div className="flex flex-wrap items-center justify-between gap-4 border-t border-dashed border-[#40372e] pt-6">
+        <span className="type-micro-legal">
+          * ZERO BLOAT · CLEAN CODE · BUILT IN KERALA
+        </span>
+        <a
+          href="#contact"
+          className="type-label border-b border-dashed border-[#ffedd7] pb-0.5 text-[12px] hover:border-[#dc5000] hover:text-[#dc5000]"
+        >
+          SCOPE THIS DISCIPLINE
+        </a>
       </div>
     </section>
   );

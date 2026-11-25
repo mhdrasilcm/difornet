@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { StudioArtifact3D } from "@/components/StudioArtifact3D";
+import { DarkroomSpotlight } from "@/components/sections/KineticText";
 import {
   Header,
   HeroSection,
@@ -13,7 +15,7 @@ import {
   MobileCTA,
   InstagramButton,
 } from "@/components/sections";
-import { NavLink, FAQ, Theme } from "@/types";
+import { NavLink, FAQ } from "@/types";
 
 const navLinks: NavLink[] = [
   { label: "Services", href: "#services", id: "services" },
@@ -55,34 +57,10 @@ const faqs: FAQ[] = [
   },
 ];
 
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") {
-    return "light";
-  }
-
-  const stored = window.localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") {
-    return stored;
-  }
-
-  return window.matchMedia("(prefers-color-scheme: dark)").matches
-    ? "dark"
-    : "light";
-}
-
 export default function Home() {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [mounted, setMounted] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState<string>("");
-
-  useEffect(() => {
-    const initialTheme = getInitialTheme();
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(initialTheme);
-    document.documentElement.classList.toggle("dark", initialTheme === "dark");
-    setMounted(true);
-  }, []);
+  const [activeServiceIndex, setActiveServiceIndex] = useState<number>(0);
 
   useEffect(() => {
     function handleScroll() {
@@ -116,18 +94,14 @@ export default function Home() {
     return () => observer.disconnect();
   }, []);
 
-  function toggleTheme() {
-    const nextTheme: Theme = theme === "light" ? "dark" : "light";
-    setTheme(nextTheme);
-    document.documentElement.classList.toggle("dark", nextTheme === "dark");
-    window.localStorage.setItem("theme", nextTheme);
-  }
-
   return (
-    <div className="min-h-full bg-[var(--background)] text-[var(--foreground)]">
+    <div className="relative min-h-full bg-[#100904] text-[#ffedd7]">
+      <StudioArtifact3D activeServiceIndex={activeServiceIndex} />
+      <DarkroomSpotlight />
+
       <a
         href="#top"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-accent focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-[var(--on-accent)]"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-[#382416] focus:px-4 focus:py-2 focus:text-xs focus:font-medium focus:uppercase focus:text-[#ffedd7]"
       >
         Skip to content
       </a>
@@ -136,14 +110,14 @@ export default function Home() {
         navLinks={navLinks}
         activeSection={activeSection}
         scrollProgress={scrollProgress}
-        theme={theme}
-        mounted={mounted}
-        onToggleTheme={toggleTheme}
       />
 
-      <main id="top">
+      <main id="top" className="relative z-10">
         <HeroSection />
-        <ServicesSection />
+        <ServicesSection
+          activeIndex={activeServiceIndex}
+          onSelectIndex={setActiveServiceIndex}
+        />
         <WorksSection />
         <FAQSection faqs={faqs} />
         <ContactSection siteUrl={process.env.NEXT_PUBLIC_SITE_URL} />

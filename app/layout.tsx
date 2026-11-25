@@ -1,22 +1,17 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Geist, Geist_Mono } from "next/font/google";
+import { Inter, Geist_Mono } from "next/font/google";
 import CookieBanner from "@/components/CookieBanner";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
-  subsets: ["latin"],
-  weight: ["500", "600", "700"],
 });
 
 const rawUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://difornet.pages.dev";
@@ -27,11 +22,11 @@ const siteUrl = cleanUrl.startsWith("http") ? cleanUrl : `https://${cleanUrl}`;
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "DiforNet — Independent Web & App Studio in Kerala",
-    template: "%s | DiforNet",
+    default: "DIFORNET — Independent Web, Mobile & Cloud Studio",
+    template: "%s | DIFORNET",
   },
   description:
-    "An independent software studio in Palakkad, Kerala building fast websites, web apps, Android apps, and clean backend systems.",
+    "An independent software studio in Palakkad, Kerala crafting web apps, mobile apps, and cloud infrastructure.",
   keywords: [
     "DiforNet",
     "web development Kerala",
@@ -47,23 +42,23 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: siteUrl,
     siteName: "DiforNet",
-    title: "DiforNet — Independent Web & App Studio in Kerala",
+    title: "DIFORNET — Independent Web, Mobile & Cloud Studio",
     description:
-      "An independent software studio in Palakkad, Kerala building fast websites, web apps, Android apps, and clean backend systems.",
+      "An independent software studio in Palakkad, Kerala crafting web apps, mobile apps, and cloud infrastructure.",
     images: [
       {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "DiforNet — Independent Web & App Studio",
+        alt: "DiforNet Studio",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "DiforNet — Independent Web & App Studio in Kerala",
+    title: "DIFORNET — Independent Web, Mobile & Cloud Studio",
     description:
-      "An independent software studio in Palakkad, Kerala building fast websites, web apps, and Android apps.",
+      "An independent software studio in Palakkad, Kerala crafting web apps, mobile apps, and cloud infrastructure.",
     images: ["/opengraph-image"],
   },
   robots: { index: true, follow: true },
@@ -77,10 +72,7 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0d" },
-  ],
+  themeColor: "#100904",
 };
 
 const jsonLd = {
@@ -119,7 +111,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${inter.variable} ${geistMono.variable} h-full antialiased`}
     >
       <head>
         <script
@@ -131,7 +123,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col bg-[#100904] text-[#ffedd7]">
         {children}
         <CookieBanner />
       </body>
