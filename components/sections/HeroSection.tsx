@@ -25,9 +25,9 @@ export function HeroSection() {
         </p>
 
         <h1 className="type-display text-[44px] sm:text-[64px] lg:text-[84px]">
-          <KineticLine delay={0.04}>SOFTWARE</KineticLine>
-          <KineticLine delay={0.12}>WITHOUT</KineticLine>
-          <KineticLine delay={0.2}>BLOAT.</KineticLine>
+          <KineticLine immediate delay={0.04}>SOFTWARE</KineticLine>
+          <KineticLine immediate delay={0.12}>WITHOUT</KineticLine>
+          <KineticLine immediate delay={0.2}>BLOAT.</KineticLine>
         </h1>
 
         <p className="type-prose mt-7 max-w-lg text-[20px] sm:text-[24px] lg:text-[26px]">

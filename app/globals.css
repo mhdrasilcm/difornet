@@ -10,7 +10,7 @@
 
 @theme {
   --color-warm-cream: #ffedd7;
-  --color-walnut-shadow: #100904;
+  --color-walnut-shadow: #0c0a09;
   --color-bark-brown: #382416;
   --color-cork-border: #40372e;
   --color-driftwood: #6c5f51;
@@ -23,7 +23,7 @@
 :root {
   color-scheme: dark;
   --color-warm-cream: #ffedd7;
-  --color-walnut-shadow: #100904;
+  --color-walnut-shadow: #0c0a09;
   --color-bark-brown: #382416;
   --color-cork-border: #40372e;
   --color-driftwood: #6c5f51;
@@ -36,12 +36,12 @@
 
 html {
   scroll-behavior: smooth;
-  background-color: #100904;
+  background-color: #0c0a09;
   color: #ffedd7;
 }
 
 body {
-  background-color: #100904;
+  background-color: #0c0a09;
   color: #ffedd7;
   font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
@@ -59,7 +59,7 @@ body[data-scroll-locked="true"] {
 
 ::selection {
   background-color: #dc5000;
-  color: #100904;
+  color: #0c0a09;
 }
 
 @layer components {
@@ -114,7 +114,7 @@ body[data-scroll-locked="true"] {
   .darkroom-card {
     border-radius: 12px;
     border: 1px solid #40372e;
-    background-color: rgba(16, 9, 4, 0.72);
+    background-color: rgba(12, 10, 9, 0.76);
     backdrop-filter: blur(8px);
   }
 
@@ -137,7 +137,7 @@ body[data-scroll-locked="true"] {
   }
 
   .btn-pill-filled:hover {
-    background-color: #4a301e;
+    background-color: #2d2724;
     transform: translateY(-1px);
   }
 
@@ -166,7 +166,7 @@ body[data-scroll-locked="true"] {
 
   .btn-ghost-outline:hover {
     background-color: #ffedd7;
-    color: #100904;
+    color: #0c0a09;
   }
 
   .btn-ghost-muted {
@@ -175,7 +175,7 @@ body[data-scroll-locked="true"] {
     justify-content: center;
     gap: 0.5rem;
     border-radius: 22.5px;
-    border: 1px solid #40372e;
+    border: 1px solid #3c3531;
     background-color: transparent;
     color: #ffedd7;
     padding: 7.5px 16px;
@@ -333,7 +333,7 @@ body[data-scroll-locked="true"] {
 
   .work-modal-panel {
     position: relative;
-    background-color: #100904;
+    background-color: #0c0a09;
     border: 1px solid #40372e;
     width: 100%;
     height: 100%;
@@ -352,7 +352,7 @@ body[data-scroll-locked="true"] {
   }
 
   .cookie-banner {
-    background-color: #100904;
+    background-color: #0c0a09;
     border-top: 1px dashed #40372e;
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }

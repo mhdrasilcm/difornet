@@ -39,7 +39,7 @@ export function StudioArtifact3D({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -50,32 +50,32 @@ export function StudioArtifact3D({
       0.1,
       100
     );
-    camera.position.set(0, 0.15, 7.2);
+    camera.position.set(0, 0.1, 7.0);
 
-    // Warm Darkroom Lighting
-    const ambient = new THREE.AmbientLight(0x382416, 1.8);
-    scene.add(ambient);
+    // Clean Studio Lighting so the 3 colored bars show rich 3D depth
+    const hemiLight = new THREE.HemisphereLight(0xfff4e6, 0x181513, 1.35);
+    scene.add(hemiLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffedd7, 3.2);
-    keyLight.position.set(4, 5, 4);
+    const keyLight = new THREE.DirectionalLight(0xffedd7, 2.8);
+    keyLight.position.set(4.5, 5.5, 5.5);
     scene.add(keyLight);
 
-    const emberRim = new THREE.PointLight(0xdc5000, 18, 18, 1.6);
-    emberRim.position.set(-3.2, -1.8, 2.5);
-    scene.add(emberRim);
+    const frontFill = new THREE.DirectionalLight(0xffffff, 1.2);
+    frontFill.position.set(-3, 1.5, 5);
+    scene.add(frontFill);
 
-    const warmRim = new THREE.PointLight(0xffedd7, 10, 16, 1.8);
-    warmRim.position.set(3.2, 2.4, -2.5);
-    scene.add(warmRim);
+    const rimLight = new THREE.PointLight(0xffedd7, 16, 18, 1.5);
+    rimLight.position.set(-3.5, -2.0, 3.2);
+    scene.add(rimLight);
 
-    // Sculpted 3-Stripe DiforNet Monolith Rig
+    // Sculpted 3-Stripe DiforNet Monoliths (Green, Gold, Red — zero rings)
     const artifactGroup = new THREE.Group();
     scene.add(artifactGroup);
 
     const barShape = new THREE.Shape();
-    const skew = 0.42;
-    const bw = 0.48;
-    const bh = 2.05;
+    const skew = 0.44;
+    const bw = 0.5;
+    const bh = 2.15;
     barShape.moveTo(-bw / 2 - skew / 2, -bh / 2);
     barShape.lineTo(bw / 2 - skew / 2, -bh / 2);
     barShape.lineTo(bw / 2 + skew / 2, bh / 2);
@@ -83,75 +83,50 @@ export function StudioArtifact3D({
     barShape.closePath();
 
     const barGeo = new THREE.ExtrudeGeometry(barShape, {
-      depth: 0.44,
+      depth: 0.42,
       bevelEnabled: true,
-      bevelThickness: 0.06,
+      bevelThickness: 0.065,
       bevelSize: 0.045,
       bevelSegments: 5,
     });
     barGeo.center();
 
-    const stripeColors = [0x2f6e49, 0xc98a2c, 0xdc5000];
+    const stripePalette = [
+      { color: 0x168a47, emissive: 0x062614 }, // Forest Green
+      { color: 0xe6a817, emissive: 0x2e1f03 }, // Saffron Gold
+      { color: 0xd9381e, emissive: 0x2b0a05 }, // Crimson Red
+    ];
+
     const barOffsets = [-0.88, 0, 0.88];
     const bars: THREE.Mesh[] = [];
-
-    const darkBodyMat = new THREE.MeshPhysicalMaterial({
-      color: 0x1c1008,
-      metalness: 0.68,
-      roughness: 0.26,
-      clearcoat: 0.9,
-      clearcoatRoughness: 0.16,
-      reflectivity: 0.9,
-    });
+    const barMaterials: THREE.MeshPhysicalMaterial[] = [];
 
     barOffsets.forEach((xOffset, idx) => {
-      const bar = new THREE.Mesh(barGeo, darkBodyMat);
-      bar.position.x = xOffset;
-
-      // Subtle glowing inner-edge accent strip matching brand color
-      const edgeGeo = new THREE.EdgesGeometry(barGeo, 28);
-      const edgeMat = new THREE.LineBasicMaterial({
-        color: stripeColors[idx],
-        transparent: true,
-        opacity: 0.72,
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: stripePalette[idx].color,
+        emissive: stripePalette[idx].emissive,
+        emissiveIntensity: 0.35,
+        metalness: 0.32,
+        roughness: 0.24,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.14,
+        reflectivity: 0.9,
       });
-      const edges = new THREE.LineSegments(edgeGeo, edgeMat);
-      bar.add(edges);
+      barMaterials.push(mat);
 
+      const bar = new THREE.Mesh(barGeo, mat);
+      bar.position.x = xOffset;
       artifactGroup.add(bar);
       bars.push(bar);
     });
 
-    // Precision Orbital Hairline Ring (Cork Border #40372e / Warm Cream #ffedd7)
-    const ringGeo = new THREE.TorusGeometry(2.35, 0.008, 12, 128);
-    const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x6c5f51,
-      transparent: true,
-      opacity: 0.45,
-    });
-    const orbitRing = new THREE.Mesh(ringGeo, ringMat);
-    orbitRing.rotation.x = Math.PI * 0.42;
-    orbitRing.rotation.y = -0.25;
-    artifactGroup.add(orbitRing);
-
-    const outerRingGeo = new THREE.TorusGeometry(2.75, 0.005, 8, 128);
-    const outerRingMat = new THREE.MeshBasicMaterial({
-      color: 0xdc5000,
-      transparent: true,
-      opacity: 0.28,
-    });
-    const outerRing = new THREE.Mesh(outerRingGeo, outerRingMat);
-    outerRing.rotation.x = Math.PI * 0.56;
-    outerRing.rotation.y = 0.32;
-    artifactGroup.add(outerRing);
-
-    // Darkroom Dust Motes
-    const particleCount = 140;
+    // Subtle Darkroom Dust Motes
+    const particleCount = 110;
     const positions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount; i++) {
       positions[i * 3] = (Math.random() - 0.5) * 14;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 9;
-      positions[i * 3 + 2] = (Math.random() - 0.5) * 8 - 1;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 8 - 1.5;
     }
     const particlesGeo = new THREE.BufferGeometry();
     particlesGeo.setAttribute(
@@ -160,14 +135,13 @@ export function StudioArtifact3D({
     );
     const particlesMat = new THREE.PointsMaterial({
       color: 0xffedd7,
-      size: 0.025,
+      size: 0.022,
       transparent: true,
-      opacity: 0.4,
+      opacity: 0.3,
     });
     const particles = new THREE.Points(particlesGeo, particlesMat);
     scene.add(particles);
 
-    // Interactive Pointer + Scroll Targets
     let targetMouseX = 0;
     let targetMouseY = 0;
     let currentMouseX = 0;
@@ -207,43 +181,40 @@ export function StudioArtifact3D({
       rafId = requestAnimationFrame(animate);
       const t = prefersReducedMotion ? 0 : clock.getElapsedTime();
 
-      currentMouseX += (targetMouseX - currentMouseX) * 0.05;
-      currentMouseY += (targetMouseY - currentMouseY) * 0.05;
+      currentMouseX += (targetMouseX - currentMouseX) * 0.055;
+      currentMouseY += (targetMouseY - currentMouseY) * 0.055;
 
-      // Scroll-choreographed artifact rotation & lateral stage shift
+      // Keep the front faces facing the viewer with gentle sculptural rotation
       const targetRotY =
-        scrollRatio * Math.PI * 2.2 + currentMouseX * 0.45 + t * 0.18;
+        Math.sin(t * 0.45) * 0.28 +
+        scrollRatio * Math.PI * 1.6 +
+        currentMouseX * 0.48;
       const targetRotX =
-        Math.sin(scrollRatio * Math.PI * 2) * 0.35 - currentMouseY * 0.3;
+        Math.sin(scrollRatio * Math.PI * 2) * 0.22 - currentMouseY * 0.3;
 
       artifactGroup.rotation.y += (targetRotY - artifactGroup.rotation.y) * 0.06;
       artifactGroup.rotation.x += (targetRotX - artifactGroup.rotation.x) * 0.06;
 
-      // Keep centered in void-mode sections, subtly right in Hero
-      const heroOffset = Math.max(0, 1 - scrollRatio * 4.5) * 1.1;
-      const targetPosX =
-        window.innerWidth >= 1024 ? heroOffset : 0;
+      // Slight right shift in Hero on desktop, centered in Void-Mode below
+      const heroOffset = Math.max(0, 1 - scrollRatio * 4.5) * 1.45;
+      const targetPosX = window.innerWidth >= 1024 ? heroOffset : 0;
       artifactGroup.position.x += (targetPosX - artifactGroup.position.x) * 0.05;
-      artifactGroup.position.y = Math.sin(t * 0.9) * 0.12;
+      artifactGroup.position.y = Math.sin(t * 0.85) * 0.1;
 
-      // Subtle bar spread/wave reacting to active service index (0..3)
       const activeIdx = serviceIndexRef.current;
       bars.forEach((bar, i) => {
-        const spread = 0.88 + scrollRatio * 0.18;
+        const spread = 0.88 + scrollRatio * 0.14;
         const targetX = (i - 1) * spread;
         const targetZ =
-          i === activeIdx % 3 ? 0.28 : Math.sin(t * 1.2 + i * 1.1) * 0.08;
+          i === activeIdx % 3 ? 0.26 : Math.sin(t * 1.1 + i * 1.1) * 0.07;
         bar.position.x += (targetX - bar.position.x) * 0.07;
         bar.position.z += (targetZ - bar.position.z) * 0.07;
       });
 
-      orbitRing.rotation.z = t * 0.12 + scrollRatio * 2;
-      outerRing.rotation.z = -t * 0.09 - scrollRatio * 1.5;
+      rimLight.position.x = -3 + currentMouseX * 2.5;
+      rimLight.position.y = -1.5 + currentMouseY * 2.2;
 
-      emberRim.position.x = -3 + currentMouseX * 2.2;
-      emberRim.position.y = -1.5 + currentMouseY * 2.2;
-
-      particles.rotation.y = t * 0.02 + scrollRatio * 0.4;
+      particles.rotation.y = t * 0.015 + scrollRatio * 0.3;
 
       renderer.render(scene, camera);
     }
@@ -256,11 +227,7 @@ export function StudioArtifact3D({
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("resize", handleResize);
       barGeo.dispose();
-      darkBodyMat.dispose();
-      ringGeo.dispose();
-      ringMat.dispose();
-      outerRingGeo.dispose();
-      outerRingMat.dispose();
+      barMaterials.forEach((m) => m.dispose());
       particlesGeo.dispose();
       particlesMat.dispose();
       renderer.dispose();
@@ -274,7 +241,7 @@ export function StudioArtifact3D({
     <div
       ref={containerRef}
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-0 opacity-85"
+      className="pointer-events-none fixed inset-0 z-0 opacity-95"
     />
   );
 }

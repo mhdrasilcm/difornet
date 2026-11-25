@@ -6,20 +6,23 @@ import { motion } from "framer-motion";
 export function KineticLine({
   children,
   delay = 0,
+  immediate = false,
   className = "",
 }: {
   children: ReactNode;
   delay?: number;
+  immediate?: boolean;
   className?: string;
 }) {
   return (
     <span className={`block overflow-hidden ${className}`}>
       <motion.span
-        initial={{ y: "105%", opacity: 0 }}
-        whileInView={{ y: "0%", opacity: 1 }}
-        viewport={{ once: true, margin: "-40px" }}
+        initial={{ y: "100%", opacity: 0 }}
+        animate={immediate ? { y: "0%", opacity: 1 } : undefined}
+        whileInView={immediate ? undefined : { y: "0%", opacity: 1 }}
+        viewport={immediate ? undefined : { once: true, amount: "some" }}
         transition={{
-          duration: 0.7,
+          duration: 0.65,
           delay,
           ease: [0.16, 1, 0.3, 1],
         }}
@@ -52,7 +55,7 @@ export function DarkroomSpotlight() {
       aria-hidden
       className="pointer-events-none fixed inset-0 z-[1] hidden md:block"
       style={{
-        background: `radial-gradient(560px circle at ${pos.x}px ${pos.y}px, rgba(56, 36, 22, 0.24), transparent 70%)`,
+        background: `radial-gradient(520px circle at ${pos.x}px ${pos.y}px, rgba(255, 237, 215, 0.055), transparent 70%)`,
       }}
     />
   );
